@@ -3,184 +3,347 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Privacy Policy - RepWiser</title>
+  <title>Privacy Policy — RepWiser</title>
   <meta name="description" content="RepWiser privacy policy for workout, health, location, photos, account, sync, and support data.">
-  <meta name="theme-color" content="#111418">
+  <meta name="theme-color" content="#faf8f3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f7f3eb;
-      --ink: #171511;
-      --muted: #6f6659;
-      --line: rgba(23, 21, 17, 0.14);
-      --panel: #ffffff;
-      --accent: #f3a91f;
-      --forest: #25362f;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --bg:      #faf8f3;
+      --bg2:     #f3efe6;
+      --ink:     #1a1712;
+      --muted:   #6b6358;
+      --muted2:  #a09890;
+      --line:    rgba(26,23,18,0.1);
+      --line2:   rgba(26,23,18,0.06);
+      --amber:   #d4870a;
+      --amber-bg:#fdf3df;
+      --amber-bd:rgba(212,135,10,0.22);
+      --forest:  #1e3028;
+      --forest2: #2a4235;
+      --green:   #4a9a6e;
+      --panel:   #ffffff;
+      --shadow:  0 2px 24px rgba(26,23,18,0.07), 0 1px 4px rgba(26,23,18,0.05);
+      font-family: 'Outfit', sans-serif;
+      color-scheme: light;
     }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: linear-gradient(135deg, #fbf8f1 0%, #eee5d7 100%);
-      line-height: 1.65;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Progress bar ── */
+    #progress {
+      position: fixed; top: 0; left: 0; z-index: 200;
+      height: 2.5px; width: 0%;
+      background: linear-gradient(90deg, var(--amber), #f5a521);
+      transition: width 0.1s linear;
+      border-radius: 0 2px 2px 0;
     }
-    a { color: inherit; }
-    .wrap { width: min(920px, calc(100% - 40px)); margin: 0 auto; }
+
+    /* ── Header ── */
     header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(250,248,243,0.88);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
       border-bottom: 1px solid var(--line);
-      background: rgba(247, 243, 235, 0.82);
-      backdrop-filter: blur(18px);
-      position: sticky;
-      top: 0;
     }
     nav {
-      min-height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
+      width: min(1200px, calc(100% - 44px)); margin: 0 auto;
+      min-height: 66px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
     }
-    .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 850; font-size: 20px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
     .mark {
-      width: 38px; height: 38px; border-radius: 11px;
+      width: 32px; height: 32px; border-radius: 9px;
       display: grid; place-items: center;
-      background: #171511; color: var(--accent); font-weight: 900;
+      background: var(--ink); color: #f5a521;
+      font-weight: 800; font-size: 14px;
     }
-    .nav-links { display: flex; gap: 14px; font-weight: 700; color: var(--muted); font-size: 14px; }
-    .nav-links a { text-decoration: none; }
-    .hero { padding: 62px 0 34px; }
+    .nav-links { display: flex; gap: 4px; font-size: 14px; font-weight: 500; color: var(--muted); }
+    .nav-links a { padding: 7px 11px; border-radius: 8px; transition: background 0.14s, color 0.14s; }
+    .nav-links a:hover { background: var(--bg2); color: var(--ink); }
+    .nav-links .active { color: var(--ink); font-weight: 600; }
+
+    /* ── Layout ── */
+    .page-wrap {
+      width: min(1200px, calc(100% - 44px)); margin: 0 auto;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 56px;
+      align-items: start;
+      padding: 48px 0 96px;
+    }
+
+    /* ── TOC sidebar ── */
+    .toc {
+      position: sticky; top: 90px;
+      font-size: 13px;
+    }
+    .toc-label {
+      font-size: 10px; font-weight: 800; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted2);
+      margin-bottom: 14px; padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .toc ul { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .toc a {
+      display: block; padding: 6px 10px; border-radius: 8px;
+      color: var(--muted); font-weight: 500; line-height: 1.3;
+      transition: all 0.14s ease;
+      border-left: 2px solid transparent;
+    }
+    .toc a:hover { background: var(--bg2); color: var(--ink); }
+    .toc a.active { color: var(--amber); background: var(--amber-bg); border-left-color: var(--amber); font-weight: 600; }
+    .toc-footer {
+      margin-top: 20px; padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: var(--muted2); font-size: 12px; line-height: 1.5;
+    }
+
+    /* ── Main content ── */
+    .doc-main {}
+
+    /* Hero */
+    .doc-hero { margin-bottom: 36px; }
     .eyebrow {
-      display: inline-block;
-      color: #9b6504;
-      background: rgba(243,169,31,0.15);
-      border: 1px solid rgba(155,101,4,0.18);
-      padding: 7px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 850;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--amber-bg); border: 1px solid var(--amber-bd);
+      color: var(--amber); padding: 6px 12px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.09em;
+      text-transform: uppercase; margin-bottom: 20px;
     }
-    h1 {
-      margin: 18px 0 12px;
-      font-size: clamp(42px, 8vw, 78px);
-      line-height: 0.98;
-      letter-spacing: 0;
+    .doc-h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(44px, 6vw, 68px);
+      font-weight: 400; line-height: 1.0; letter-spacing: -0.02em;
+      color: var(--ink); margin-bottom: 16px;
     }
-    .intro { color: var(--muted); font-size: 19px; max-width: 760px; margin: 0; }
-    .content {
-      background: rgba(255,255,255,0.76);
+    .doc-h1 em { font-style: italic; color: var(--amber); }
+    .doc-intro { color: var(--muted); font-size: 18px; line-height: 1.65; max-width: 640px; }
+
+    /* Article */
+    .doc-article {
+      background: var(--panel);
       border: 1px solid var(--line);
       border-radius: 22px;
-      padding: clamp(24px, 5vw, 48px);
-      margin: 28px 0 72px;
-      box-shadow: 0 24px 80px rgba(35, 28, 18, 0.11);
+      padding: clamp(28px, 5vw, 52px);
+      box-shadow: var(--shadow);
     }
-    h2 { font-size: 26px; line-height: 1.2; margin: 34px 0 10px; }
-    h2:first-child { margin-top: 0; }
-    p { margin: 0 0 16px; color: var(--muted); }
-    ul { margin: 0 0 16px; padding-left: 22px; color: var(--muted); }
-    strong { color: var(--ink); }
+    .doc-section { padding-top: 36px; }
+    .doc-section:first-child { padding-top: 0; }
+    .doc-section + .doc-section { border-top: 1px solid var(--line2); margin-top: 36px; }
+
+    h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(20px, 2.5vw, 26px);
+      font-weight: 400; line-height: 1.2; letter-spacing: -0.01em;
+      color: var(--ink); margin-bottom: 14px;
+      position: relative; padding-left: 16px;
+    }
+    h2::before {
+      content: '';
+      position: absolute; left: 0; top: 0.15em;
+      width: 3px; height: 0.82em;
+      background: var(--amber); border-radius: 2px;
+    }
+    p { color: var(--muted); line-height: 1.72; margin-bottom: 14px; font-size: 15.5px; }
+    p:last-child { margin-bottom: 0; }
+    ul { color: var(--muted); line-height: 1.72; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+    ul li { display: flex; gap: 10px; align-items: flex-start; font-size: 15.5px; }
+    ul li::before {
+      content: '—'; color: var(--amber); font-weight: 700; flex-shrink: 0;
+      margin-top: 0.05em;
+    }
+    strong { color: var(--ink); font-weight: 650; }
+    a.inline { color: var(--amber); border-bottom: 1px solid var(--amber-bd); transition: border-color 0.15s, color 0.15s; }
+    a.inline:hover { color: #b8720a; border-color: #b8720a; }
+
     .notice {
-      background: #25362f;
-      color: #fff7ea;
-      border-radius: 16px;
-      padding: 18px;
-      margin: 22px 0;
+      background: linear-gradient(135deg, var(--forest), var(--forest2));
+      border: 1px solid rgba(74,154,110,0.15);
+      border-radius: 14px; padding: 18px 22px; margin: 20px 0;
     }
-    .notice p { color: rgba(255,247,234,0.78); margin: 0; }
-    footer { border-top: 1px solid var(--line); padding: 28px 0 42px; color: var(--muted); font-size: 14px; }
-    .footer-inner { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .footer-links { display: flex; gap: 14px; flex-wrap: wrap; }
-    @media (max-width: 700px) { .nav-links { display: none; } }
+    .notice p { color: rgba(232,245,238,0.8); margin: 0; font-size: 14.5px; }
+    .notice strong { color: #b8e8d0; }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--ink); color: rgba(237,232,224,0.55);
+      padding: 30px 0 44px;
+    }
+    .footer-inner {
+      width: min(1200px, calc(100% - 44px)); margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .footer-brand { display: flex; align-items: center; gap: 10px; }
+    .footer-mark {
+      width: 28px; height: 28px; border-radius: 8px;
+      display: grid; place-items: center;
+      background: rgba(245,165,33,0.12); color: #f5a521;
+      font-weight: 800; font-size: 13px; border: 1px solid rgba(245,165,33,0.18);
+    }
+    .footer-copy { font-size: 13px; }
+    .footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
+    .footer-links a { font-size: 13px; font-weight: 600; color: rgba(237,232,224,0.55); transition: color 0.15s; }
+    .footer-links a:hover { color: rgba(237,232,224,0.9); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .page-wrap { grid-template-columns: 1fr; gap: 0; padding: 32px 0 72px; }
+      .toc { display: none; }
+      .nav-links { display: none; }
+    }
   </style>
 </head>
 <body>
+  <div id="progress" role="progressbar" aria-label="Reading progress"></div>
+
   <header>
-    <nav class="wrap" aria-label="Main navigation">
+    <nav aria-label="Main navigation">
       <a class="brand" href="/"><span class="mark">R</span><span>RepWiser</span></a>
       <div class="nav-links">
         <a href="/">Home</a>
-        <a href="/privacy/">Privacy</a>
+        <a href="/privacy/" class="active">Privacy</a>
         <a href="/terms/">Terms</a>
       </div>
     </nav>
   </header>
 
-  <main class="wrap">
-    <section class="hero">
-      <div class="eyebrow">Effective May 1, 2026</div>
-      <h1>Privacy Policy</h1>
-      <p class="intro">This policy explains how RepWiser handles information used to provide workout logging, coaching, recovery, Apple Watch, Apple Health, route tracking, sync, and support features.</p>
-    </section>
+  <div class="page-wrap">
+    <!-- Sidebar TOC -->
+    <aside>
+      <nav class="toc" aria-label="Table of contents">
+        <div class="toc-label">Contents</div>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#information">Information You Provide</a></li>
+          <li><a href="#usage">How We Use It</a></li>
+          <li><a href="#health">Apple Health</a></li>
+          <li><a href="#location">Location & Tracking</a></li>
+          <li><a href="#cloud">Cloud Sync & AI</a></li>
+          <li><a href="#third-party">Third-Party Services</a></li>
+          <li><a href="#retention">Data Retention</a></li>
+          <li><a href="#choices">Your Choices</a></li>
+          <li><a href="#children">Children</a></li>
+          <li><a href="#changes">Changes</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="toc-footer">Effective May 1, 2026</div>
+      </nav>
+    </aside>
 
-    <article class="content">
-      <h2>Overview</h2>
-      <p>RepWiser is designed to help you plan workouts, log training, review progress, and understand recovery. We do not sell your personal information. We do not use your information for third-party advertising or cross-app tracking.</p>
-
-      <h2>Information You Provide Or Create</h2>
-      <p>Depending on the features you use, RepWiser may process the following information:</p>
-      <ul>
-        <li><strong>Workout and fitness data:</strong> routines, exercises, sets, reps, weights, RPE, rest timers, tags, notes, cardio entries, workout history, estimated PRs, training trends, and coaching summaries.</li>
-        <li><strong>Profile and account data:</strong> email address, sign-in state, preferences, units, training goals, experience level, equipment, and app settings.</li>
-        <li><strong>Health and recovery data:</strong> Apple Health information you permit the app to read, such as sleep, resting heart rate, heart rate variability, recent activity, and workouts.</li>
-        <li><strong>Location data:</strong> route and distance information for outdoor walks, runs, and rides when you choose to enable outdoor tracking.</li>
-        <li><strong>Photos or videos:</strong> progress photos or exercise media you choose to use in the app.</li>
-        <li><strong>Support and diagnostics:</strong> information you include when contacting support, plus app version, build, iOS version, device model, and the screen where feedback was sent.</li>
-      </ul>
-
-      <h2>How RepWiser Uses Information</h2>
-      <p>RepWiser uses information to provide app functionality, including:</p>
-      <ul>
-        <li>Creating and saving routines and live workouts.</li>
-        <li>Showing history, charts, PRs, volume, consistency, and muscle balance.</li>
-        <li>Providing recovery and readiness guidance when you enable related permissions.</li>
-        <li>Keeping iPhone, Apple Watch, and widgets in sync.</li>
-        <li>Saving completed workouts to Apple Health when you enable HealthKit writes.</li>
-        <li>Sending reminders, rest alerts, and training notifications when you allow notifications.</li>
-        <li>Responding to support requests and improving app reliability.</li>
-      </ul>
-
-      <h2>Apple Health</h2>
-      <p>RepWiser only reads or writes Apple Health data after you grant permission through iOS. Health data is used to power workout, recovery, and readiness features. RepWiser does not use Apple Health data for advertising and does not sell Apple Health data.</p>
-
-      <h2>Location And Outdoor Tracking</h2>
-      <p>If you enable outdoor cardio tracking, RepWiser may use precise location while the workout is active to record route, distance, pace, and related cardio metrics. Location access is not required for strength training features.</p>
-
-      <h2>Cloud Sync And AI Features</h2>
-      <p>RepWiser may offer cloud sync and coaching features that process your training data through managed backend services. These features are used to keep your data available across sessions and to generate app functionality such as coaching summaries or recommendations. You should not enter sensitive information into free-text notes that you do not want processed by these features.</p>
-
-      <h2>Third-Party Services</h2>
-      <p>RepWiser may rely on service providers for authentication, sync, backend processing, crash diagnostics, app distribution, and email support. These providers process information only as needed to provide app functionality, security, support, and reliability.</p>
-
-      <h2>Data Retention And Deletion</h2>
-      <p>Workout data remains available in the app unless you delete it or use account/data deletion features where available. If you use cloud sync, deletion may also need to be processed on backend systems. You can contact support for help with data questions or deletion requests.</p>
-
-      <h2>Your Choices</h2>
-      <ul>
-        <li>You can change Apple Health, Location, Photos, and Notifications permissions in iOS Settings.</li>
-        <li>You can choose whether to use optional cloud, AI, outdoor route, and progress photo features.</li>
-        <li>You can contact us about privacy requests at <a href="mailto:support@repwiser.fit">support@repwiser.fit</a>.</li>
-      </ul>
-
-      <div class="notice">
-        <p><strong>Beta note:</strong> RepWiser may be distributed through TestFlight while features are still being refined. Beta feedback helps improve stability, usability, and reliability before public release.</p>
+    <!-- Main doc -->
+    <main>
+      <div class="doc-hero">
+        <div class="eyebrow">
+          <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><circle cx="4.5" cy="4.5" r="4.5" fill="currentColor" opacity=".4"/><circle cx="4.5" cy="4.5" r="2.5" fill="currentColor"/></svg>
+          Effective May 1, 2026
+        </div>
+        <h1 class="doc-h1">Privacy<br><em>Policy</em></h1>
+        <p class="doc-intro">This policy explains how RepWiser handles information used to provide workout logging, coaching, recovery, Apple Watch, Apple Health, route tracking, sync, and support features.</p>
       </div>
 
-      <h2>Children</h2>
-      <p>RepWiser is not intended for children under 13. If you believe a child has provided personal information, contact us so we can review and respond.</p>
+      <article class="doc-article">
 
-      <h2>Changes To This Policy</h2>
-      <p>We may update this Privacy Policy as RepWiser changes. The effective date at the top of this page shows when the policy was last updated.</p>
+        <div class="doc-section" id="overview">
+          <h2>Overview</h2>
+          <p>RepWiser is designed to help you plan workouts, log training, review progress, and understand recovery. <strong>We do not sell your personal information.</strong> We do not use your information for third-party advertising or cross-app tracking.</p>
+        </div>
 
-      <h2>Contact</h2>
-      <p>For privacy questions, support requests, or data requests, contact <a href="mailto:support@repwiser.fit">support@repwiser.fit</a>.</p>
-    </article>
-  </main>
+        <div class="doc-section" id="information">
+          <h2>Information You Provide Or Create</h2>
+          <p>Depending on the features you use, RepWiser may process the following information:</p>
+          <ul>
+            <li><strong>Workout and fitness data:</strong> routines, exercises, sets, reps, weights, RPE, rest timers, tags, notes, cardio entries, workout history, estimated PRs, training trends, and coaching summaries.</li>
+            <li><strong>Profile and account data:</strong> email address, sign-in state, preferences, units, training goals, experience level, equipment, and app settings.</li>
+            <li><strong>Health and recovery data:</strong> Apple Health information you permit the app to read, such as sleep, resting heart rate, heart rate variability, recent activity, and workouts.</li>
+            <li><strong>Location data:</strong> route and distance information for outdoor walks, runs, and rides when you choose to enable outdoor tracking.</li>
+            <li><strong>Photos or videos:</strong> progress photos or exercise media you choose to use in the app.</li>
+            <li><strong>Support and diagnostics:</strong> information you include when contacting support, plus app version, build, iOS version, device model, and the screen where feedback was sent.</li>
+          </ul>
+        </div>
+
+        <div class="doc-section" id="usage">
+          <h2>How RepWiser Uses Information</h2>
+          <p>RepWiser uses information to provide app functionality, including:</p>
+          <ul>
+            <li>Creating and saving routines and live workouts.</li>
+            <li>Showing history, charts, PRs, volume, consistency, and muscle balance.</li>
+            <li>Providing recovery and readiness guidance when you enable related permissions.</li>
+            <li>Keeping iPhone, Apple Watch, and widgets in sync.</li>
+            <li>Saving completed workouts to Apple Health when you enable HealthKit writes.</li>
+            <li>Sending reminders, rest alerts, and training notifications when you allow notifications.</li>
+            <li>Responding to support requests and improving app reliability.</li>
+          </ul>
+        </div>
+
+        <div class="doc-section" id="health">
+          <h2>Apple Health</h2>
+          <p>RepWiser only reads or writes Apple Health data after you grant permission through iOS. Health data is used to power workout, recovery, and readiness features. <strong>RepWiser does not use Apple Health data for advertising and does not sell Apple Health data.</strong></p>
+        </div>
+
+        <div class="doc-section" id="location">
+          <h2>Location And Outdoor Tracking</h2>
+          <p>If you enable outdoor cardio tracking, RepWiser may use precise location while the workout is active to record route, distance, pace, and related cardio metrics. Location access is not required for strength training features.</p>
+        </div>
+
+        <div class="doc-section" id="cloud">
+          <h2>Cloud Sync And AI Features</h2>
+          <p>RepWiser may offer cloud sync and coaching features that process your training data through managed backend services. These features are used to keep your data available across sessions and to generate app functionality such as coaching summaries or recommendations. You should not enter sensitive information into free-text notes that you do not want processed by these features.</p>
+        </div>
+
+        <div class="doc-section" id="third-party">
+          <h2>Third-Party Services</h2>
+          <p>RepWiser may rely on service providers for authentication, sync, backend processing, crash diagnostics, app distribution, and email support. These providers process information only as needed to provide app functionality, security, support, and reliability.</p>
+        </div>
+
+        <div class="doc-section" id="retention">
+          <h2>Data Retention And Deletion</h2>
+          <p>Workout data remains available in the app unless you delete it or use account/data deletion features where available. If you use cloud sync, deletion may also need to be processed on backend systems. You can contact support for help with data questions or deletion requests.</p>
+        </div>
+
+        <div class="doc-section" id="choices">
+          <h2>Your Choices</h2>
+          <ul>
+            <li>You can change Apple Health, Location, Photos, and Notifications permissions in iOS Settings.</li>
+            <li>You can choose whether to use optional cloud, AI, outdoor route, and progress photo features.</li>
+            <li>You can contact us about privacy requests at <a href="mailto:support@repwiser.fit" class="inline">support@repwiser.fit</a>.</li>
+          </ul>
+          <div class="notice">
+            <p><strong>Beta note:</strong> RepWiser may be distributed through TestFlight while features are still being refined. Beta feedback helps improve stability, usability, and reliability before public release.</p>
+          </div>
+        </div>
+
+        <div class="doc-section" id="children">
+          <h2>Children</h2>
+          <p>RepWiser is not intended for children under 13. If you believe a child has provided personal information, contact us so we can review and respond.</p>
+        </div>
+
+        <div class="doc-section" id="changes">
+          <h2>Changes To This Policy</h2>
+          <p>We may update this Privacy Policy as RepWiser changes. The effective date at the top of this page shows when the policy was last updated.</p>
+        </div>
+
+        <div class="doc-section" id="contact">
+          <h2>Contact</h2>
+          <p>For privacy questions, support requests, or data requests, contact <a href="mailto:support@repwiser.fit" class="inline">support@repwiser.fit</a>.</p>
+        </div>
+
+      </article>
+    </main>
+  </div>
 
   <footer>
-    <div class="wrap footer-inner">
-      <div>© 2026 RepWiser. Built by Biswajit Bastia.</div>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="footer-mark">R</span>
+        <span class="footer-copy">© 2026 RepWiser · Biswajit Bastia</span>
+      </div>
       <div class="footer-links">
         <a href="/">Home</a>
         <a href="/terms/">Terms</a>
@@ -188,5 +351,30 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    // ── Reading progress bar ──
+    const bar = document.getElementById('progress');
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+      bar.style.width = Math.min(100, pct) + '%';
+    }, { passive: true });
+
+    // ── Active TOC highlight ──
+    const tocLinks = document.querySelectorAll('.toc a');
+    const sections = document.querySelectorAll('.doc-section');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          tocLinks.forEach(l => {
+            l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    sections.forEach(s => observer.observe(s));
+  </script>
 </body>
 </html>
