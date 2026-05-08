@@ -151,7 +151,11 @@
     }
 
     /* Conic gradient ring around the avatar. The ring is the 2px padding
-       between this wrapper and the inner .avatar circle. */
+       between this wrapper and the inner .avatar circle. The ring is
+       intentionally static — earlier versions spun the gradient, but
+       that pulled the inner photo with it (nested transforms compose
+       across counter-rotation), so the user's profile picture appeared
+       to rotate. The static gradient still reads as premium. */
     .avatar-ring {
       position: relative; z-index: 1;
       width: 104px; height: 104px;
@@ -164,9 +168,7 @@
         rgba(245,165,33,0.18) 240deg,
         var(--amber) 360deg
       );
-      animation: ringSpin 24s linear infinite;
     }
-    @keyframes ringSpin { to { transform: rotate(360deg); } }
     .avatar {
       width: 100%; height: 100%; border-radius: 50%;
       background: linear-gradient(160deg, var(--s2), var(--s3));
@@ -175,12 +177,9 @@
       letter-spacing: -0.02em;
       box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
       overflow: hidden;
-      /* Counter-rotate to keep initials upright while the ring spins. */
-      animation: ringSpin 24s linear infinite reverse;
     }
     .avatar img {
       width: 100%; height: 100%; object-fit: cover;
-      animation: ringSpin 24s linear infinite; /* counter the wrapper's reverse */
     }
 
     .display-name {
@@ -499,7 +498,6 @@
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
       }
-      .avatar-ring, .avatar, .avatar img { animation: none !important; }
       .avatar-stage::before { animation: none !important; }
       html { scroll-behavior: auto; }
     }
@@ -756,15 +754,11 @@
           dot: true,
         });
       }
-      if (identity.weightStartKg && identity.weightTargetKg) {
-        items.push({
-          lbl: 'Weight',
-          val: `${Math.round(identity.weightStartKg)} → ${Math.round(identity.weightTargetKg)} kg`,
-          dot: true,
-        });
-      } else if (identity.weightTargetKg) {
-        items.push({ lbl: 'Target', val: `${Math.round(identity.weightTargetKg)} kg`, dot: true });
-      }
+      // Body-measurement pills (start weight, target weight, height) are
+      // intentionally NOT rendered. They're individual-body data and the
+      // Edge Function no longer returns them anyway — this guard is
+      // defense in depth so a future schema change can't accidentally
+      // surface them on the share link.
       if (!items.length) return '';
       return `<div class="pills">` +
         items.map(p =>
