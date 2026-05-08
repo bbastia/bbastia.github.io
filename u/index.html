@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RepWiser profile</title>
+  <meta name="description" content="A friend shared their RepWiser training profile with you. See their goal, plan, recent workouts and progress.">
+  <meta name="theme-color" content="#0b0d0c">
+  <meta name="robots" content="noindex">
+
+  <!-- Open Graph (used when /u/<username> URLs are pasted into iMessage,
+       WhatsApp, Twitter, etc.). The values are intentionally generic —
+       GitHub Pages can't render dynamic per-user OG cards without a
+       build step. The recipient still gets a useful "RepWiser profile"
+       unfurl with brand imagery. -->
+  <meta property="og:title" content="A RepWiser training profile">
+  <meta property="og:description" content="See goal, plan, and recent workouts. Get RepWiser to follow.">
+  <meta property="og:url" content="https://repwiser.fit/u/">
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="RepWiser">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:        #0b0d0c;
+      --s1:        #131614;
+      --s2:        #1a1e1b;
+      --s3:        #222720;
+      --border:    rgba(255,255,255,0.07);
+      --bup:       rgba(255,255,255,0.13);
+      --text:      #ede8e0;
+      --muted:     rgba(237,232,224,0.48);
+      --muted2:    rgba(237,232,224,0.28);
+      --amber:     #f5a521;
+      --amber-h:   #f8b93d;
+      --amber-glo: rgba(245,165,33,0.14);
+      --amber-dk:  rgba(245,165,33,0.08);
+      --forest:    #182a22;
+      --forest2:   #1f3a2e;
+      --green:     #5dac83;
+      font-family: 'Outfit', sans-serif;
+      color-scheme: dark;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Grain overlay (matches landing page) */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='1'/></svg>");
+      opacity: 0.032;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* Ambient orbs */
+    .orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(90px); }
+    .orb-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(245,165,33,0.10) 0%, transparent 65%);
+      top: -200px; right: -160px;
+    }
+    .orb-2 {
+      width: 460px; height: 460px;
+      background: radial-gradient(circle, rgba(30,55,40,0.7) 0%, transparent 70%);
+      bottom: 20%; left: -160px;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(720px, calc(100% - 36px)); margin: 0 auto; position: relative; z-index: 1; }
+
+    /* Header */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      border-bottom: 1px solid var(--border);
+      background: rgba(11,13,12,0.78);
+      backdrop-filter: blur(22px) saturate(180%);
+      -webkit-backdrop-filter: blur(22px) saturate(180%);
+    }
+    nav {
+      min-height: 62px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 16px; font-weight: 700; letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .mark {
+      width: 32px; height: 32px; border-radius: 9px;
+      display: grid; place-items: center;
+      background: linear-gradient(145deg, #1c1c18, #2e2514);
+      border: 1px solid rgba(245,165,33,0.22);
+      color: var(--amber);
+      font-weight: 800; font-size: 14px;
+      box-shadow: 0 0 0 3px rgba(245,165,33,0.06), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .nav-cta {
+      background: var(--amber); color: #100e07;
+      font-weight: 700; padding: 8px 14px; border-radius: 10px;
+      font-size: 13px; box-shadow: 0 4px 16px rgba(245,165,33,0.22);
+      transition: all 0.18s ease;
+    }
+    .nav-cta:hover { background: var(--amber-h); transform: translateY(-1px); }
+
+    /* Sections */
+    main { padding: 28px 0 96px; }
+
+    /* Identity hero */
+    .identity {
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 10px; padding: 18px 0 22px;
+    }
+    .avatar {
+      width: 96px; height: 96px; border-radius: 50%;
+      background: linear-gradient(160deg, var(--s2), var(--s3));
+      border: 1px solid var(--border);
+      display: grid; place-items: center;
+      font-size: 36px; font-weight: 700; color: var(--amber);
+      letter-spacing: -0.02em;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+      overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .display-name {
+      font-size: clamp(28px, 4.5vw, 36px);
+      font-weight: 800; letter-spacing: -0.03em; line-height: 1.05;
+      margin-top: 12px;
+    }
+    .display-name em {
+      font-family: 'Instrument Serif', serif; font-style: italic;
+      font-weight: 400; color: var(--amber);
+    }
+    .handle {
+      color: var(--muted); font-size: 14px; font-weight: 500;
+      letter-spacing: 0;
+    }
+    .bio {
+      color: var(--muted); font-size: 14.5px; line-height: 1.55;
+      max-width: 460px; margin-top: 8px; padding: 0 12px;
+    }
+    .location {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--muted2); font-size: 12px; font-weight: 500;
+      margin-top: 4px;
+    }
+
+    /* Identity pills (goal/level/plan/etc.) */
+    .pills {
+      display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+      margin-top: 18px; padding: 0 8px;
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--s1); border: 1px solid var(--border);
+      padding: 7px 12px; border-radius: 999px;
+      font-size: 12.5px; font-weight: 600; color: var(--text);
+    }
+    .pill .pill-lbl { color: var(--muted); font-weight: 500; }
+    .pill .pill-rule { width: 4px; height: 4px; border-radius: 50%; background: var(--muted2); }
+
+    /* Totals strip */
+    .totals {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px; margin-top: 24px;
+    }
+    .total {
+      background: var(--s1); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px 14px;
+      display: flex; flex-direction: column; gap: 4px;
+      text-align: center;
+    }
+    .total .total-num {
+      font-size: 26px; font-weight: 700; color: var(--text);
+      letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+    }
+    .total .total-lbl {
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      letter-spacing: 0.07em; text-transform: uppercase;
+    }
+
+    /* Section headings */
+    .section-head {
+      display: flex; align-items: center; gap: 8px;
+      margin: 36px 0 14px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--amber); opacity: 0.85;
+    }
+    .section-head::before {
+      content: ''; width: 16px; height: 1.5px;
+      background: var(--amber); border-radius: 1px;
+    }
+
+    /* Recent workouts */
+    .post {
+      background: var(--s1); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden; margin-bottom: 12px;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .post:hover { border-color: var(--bup); transform: translateY(-1px); }
+    .post-media {
+      width: 100%; aspect-ratio: 16/9; background: var(--s2);
+      object-fit: cover; display: block;
+    }
+    .post-body { padding: 14px 16px 16px; }
+    .post-title {
+      font-size: 17px; font-weight: 700; color: var(--text);
+      letter-spacing: -0.01em; margin-bottom: 4px;
+    }
+    .post-meta {
+      font-size: 12px; color: var(--muted); font-weight: 500;
+    }
+    .post-stats {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;
+    }
+    .stat-chip {
+      background: var(--s2); border: 1px solid var(--border);
+      padding: 5px 10px; border-radius: 8px;
+      font-size: 12px; font-weight: 600; color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .post-engagement {
+      display: flex; gap: 14px; margin-top: 12px;
+      color: var(--muted); font-size: 12px; font-weight: 500;
+    }
+    .post-engagement span { display: inline-flex; align-items: center; gap: 4px; }
+    .post-caption {
+      color: var(--muted); font-size: 13px; line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    /* Connect CTA block */
+    .connect {
+      margin-top: 36px; padding: 26px 22px 28px;
+      background: linear-gradient(160deg, var(--s2), var(--s1));
+      border: 1px solid rgba(245,165,33,0.16);
+      border-radius: 18px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    }
+    .connect h2 {
+      font-size: 22px; font-weight: 700; letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .connect h2 em {
+      font-family: 'Instrument Serif', serif; font-style: italic;
+      font-weight: 400; color: var(--amber);
+    }
+    .connect p {
+      color: var(--muted); font-size: 14px; line-height: 1.55;
+      margin-bottom: 18px;
+    }
+    .connect-row {
+      display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 22px; border-radius: 12px;
+      font-size: 14px; font-weight: 650;
+      transition: all 0.18s ease; cursor: pointer; border: none;
+      font-family: inherit;
+    }
+    .btn-primary {
+      background: var(--amber); color: #14100a;
+      box-shadow: 0 8px 26px rgba(245,165,33,0.28);
+    }
+    .btn-primary:hover { background: var(--amber-h); transform: translateY(-1px); }
+    .btn-secondary {
+      background: var(--s2); color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: var(--s3); border-color: var(--bup); }
+
+    /* Skeleton state (visible until JS replaces it) */
+    .skeleton-bar {
+      background: linear-gradient(90deg, var(--s2) 0%, var(--s3) 50%, var(--s2) 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s ease-in-out infinite;
+      border-radius: 8px;
+    }
+    @keyframes shimmer {
+      0%   { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+    .sk-avatar { width: 96px; height: 96px; border-radius: 50%; }
+    .sk-line   { height: 14px; }
+
+    /* Empty / error state */
+    .state {
+      text-align: center; padding: 56px 20px;
+    }
+    .state-icon {
+      width: 64px; height: 64px; border-radius: 16px;
+      display: grid; place-items: center; margin: 0 auto 16px;
+      background: var(--s1); border: 1px solid var(--border);
+      font-size: 28px; color: var(--amber);
+    }
+    .state h2 {
+      font-size: 22px; font-weight: 700; letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+    .state p {
+      color: var(--muted); font-size: 14.5px; line-height: 1.55;
+      max-width: 380px; margin: 0 auto 22px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 22px 0; margin-top: 36px;
+      font-size: 12px; color: var(--muted2);
+    }
+    .footer-inner {
+      display: flex; flex-wrap: wrap; gap: 14px;
+      align-items: center; justify-content: space-between;
+    }
+    .footer-links { display: flex; gap: 18px; }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 540px) {
+      .totals { grid-template-columns: repeat(2, 1fr); }
+      .post-media { aspect-ratio: 4/3; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+  </div>
+
+  <header>
+    <div class="wrap">
+      <nav>
+        <a class="brand" href="/">
+          <span class="mark">R</span>
+          <span>RepWiser</span>
+        </a>
+        <a class="nav-cta" href="https://apps.apple.com/app/repwiser/id6744890930"
+           target="_blank" rel="noopener">Get the app</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" id="root">
+    <!-- Skeleton (shown until the fetch resolves). Replaced by JS. -->
+    <section class="identity" id="skeleton">
+      <div class="skeleton-bar sk-avatar"></div>
+      <div class="skeleton-bar sk-line" style="width:200px; height:24px; margin-top:6px;"></div>
+      <div class="skeleton-bar sk-line" style="width:120px; margin-top:4px;"></div>
+      <div class="pills" style="margin-top:18px;">
+        <div class="skeleton-bar" style="width:88px; height:30px; border-radius:999px;"></div>
+        <div class="skeleton-bar" style="width:108px; height:30px; border-radius:999px;"></div>
+        <div class="skeleton-bar" style="width:72px; height:30px; border-radius:999px;"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <a class="brand" href="/" style="font-size:14px;">
+        <span class="mark" style="width:26px; height:26px; font-size:12px;">R</span>
+        <span>RepWiser</span>
+      </a>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ─────────────────────────────────────────────────────────────────
+    // Public-profile share-link page (repwiser.fit/u/<username>).
+    //
+    // GitHub Pages serves this file for two paths:
+    //   1. /u/   (this file directly — HTTP 200) — shows the
+    //      "no username supplied" empty state.
+    //   2. /u/<username> (via 404.html SPA-redirect — HTTP 404 status,
+    //      but the page renders normally).
+    //
+    // Either way, JS reads the username from the URL, calls the
+    // public-profile-by-username Edge Function (anon-allowed), and
+    // renders the resulting profile inline. The Edge Function is the
+    // *only* privacy boundary — this page just renders what comes
+    // back. See supabase/functions/public-profile-by-username/index.ts
+    // for what's filtered server-side (visibility=everyone only,
+    // signed media URLs, 410 when toggled off).
+    // ─────────────────────────────────────────────────────────────────
+
+    const SUPABASE_URL = 'https://wqnbhfkrtfzniaibsvfa.supabase.co';
+    // Anon (publishable) JWT — safe to embed in public web. This is the
+    // same key the iOS app ships in SupabaseConfig.plist; rotating it
+    // would require an iOS release, so we re-read the same value here.
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxbmJoZmtydGZ6bmlhaWJzdmZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5ODUwOTQsImV4cCI6MjA5MjU2MTA5NH0._5L7mY4ytooUxbZnvomO5b3zRTR6ESCXQ1qUx2tMoqc';
+    const APP_STORE_URL = 'https://apps.apple.com/app/repwiser/id6744890930';
+    const FN = SUPABASE_URL + '/functions/v1/public-profile-by-username';
+
+    // Pull username from the URL. Two cases we have to handle:
+    //   1. /u/<username>  (path-based — preferred share format from iOS)
+    //   2. /u/?u=<u> or /u/?username=<u> (query fallback if needed)
+    function extractUsername() {
+      const path = window.location.pathname.replace(/\/+$/, '');
+      const parts = path.split('/').filter(Boolean);
+      // ['u'] → no username; ['u', 'poorna'] → 'poorna'; deeper → still take 'poorna'
+      if (parts.length >= 2 && parts[0].toLowerCase() === 'u') {
+        return parts[1].toLowerCase();
+      }
+      const params = new URLSearchParams(window.location.search);
+      const queryName = params.get('username') || params.get('u');
+      return queryName ? queryName.toLowerCase() : '';
+    }
+
+    // ── Formatters ──────────────────────────────────────────────────
+
+    function escapeHtml(value) {
+      if (value == null) return '';
+      return String(value)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function titleCase(slug) {
+      if (!slug) return '';
+      return slug.replace(/[_-]+/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase())
+        .trim();
+    }
+
+    function initialsFor(name, username) {
+      const source = (name || username || 'R').trim();
+      const parts = source.split(/\s+/);
+      if (parts.length >= 2) {
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+      }
+      return source.slice(0, 2).toUpperCase();
+    }
+
+    function formatDuration(seconds) {
+      if (seconds == null || isNaN(seconds)) return '';
+      const total = Math.max(0, Math.round(seconds));
+      const h = Math.floor(total / 3600);
+      const m = Math.floor((total % 3600) / 60);
+      if (h > 0) return `${h}h ${m}m`;
+      return `${m}m`;
+    }
+
+    function formatVolume(kg) {
+      if (kg == null || isNaN(kg)) return '';
+      const value = Number(kg);
+      if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k kg';
+      return Math.round(value) + ' kg';
+    }
+
+    function relativeTime(iso) {
+      if (!iso) return '';
+      const then = new Date(iso).getTime();
+      if (isNaN(then)) return '';
+      const diff = Date.now() - then;
+      const min = 60_000, hr = 60 * min, day = 24 * hr, week = 7 * day;
+      if (diff < hr)  return Math.max(1, Math.floor(diff / min)) + 'm ago';
+      if (diff < day) return Math.floor(diff / hr) + 'h ago';
+      if (diff < week) return Math.floor(diff / day) + 'd ago';
+      return Math.floor(diff / week) + 'w ago';
+    }
+
+    function locationText(loc) {
+      if (!loc) return '';
+      const parts = [loc.city, loc.state, loc.country]
+        .map(p => (p || '').trim()).filter(Boolean);
+      return parts.join(', ');
+    }
+
+    // ── Renderers ──────────────────────────────────────────────────
+
+    function renderState(opts) {
+      const { icon, title, body, primary, secondary } = opts;
+      const root = document.getElementById('root');
+      root.innerHTML = `
+        <section class="state">
+          <div class="state-icon">${icon || '·'}</div>
+          <h2>${escapeHtml(title)}</h2>
+          <p>${escapeHtml(body)}</p>
+          <div class="connect-row">
+            ${primary ? `<a class="btn btn-primary" href="${primary.href}">${escapeHtml(primary.label)}</a>` : ''}
+            ${secondary ? `<a class="btn btn-secondary" href="${secondary.href}">${escapeHtml(secondary.label)}</a>` : ''}
+          </div>
+        </section>`;
+    }
+
+    function renderEmptyUsername() {
+      renderState({
+        icon: '@',
+        title: 'Looking for someone?',
+        body: 'RepWiser profiles live at repwiser.fit/u/<username>. Open the full link your friend sent you, or grab the app to find them inside RepWiser.',
+        primary:   { label: 'Get RepWiser',     href: APP_STORE_URL },
+        secondary: { label: 'Back to home',     href: '/' },
+      });
+    }
+
+    function renderNotFound(username) {
+      renderState({
+        icon: '?',
+        title: 'Profile not found',
+        body: `We couldn't find @${username || 'that user'} on RepWiser. The username may have changed or the account may have been deleted.`,
+        primary:   { label: 'Get RepWiser', href: APP_STORE_URL },
+        secondary: { label: 'Back to home', href: '/' },
+      });
+    }
+
+    function renderDisabled() {
+      renderState({
+        icon: '🔒',
+        title: 'This profile is no longer public',
+        body: 'The athlete who shared this link has turned off their public profile page. Get RepWiser to discover other lifters and follow them inside the app.',
+        primary:   { label: 'Get RepWiser', href: APP_STORE_URL },
+        secondary: { label: 'Back to home', href: '/' },
+      });
+    }
+
+    function renderError() {
+      renderState({
+        icon: '!',
+        title: "We couldn't load this profile",
+        body: 'Something went wrong reaching RepWiser. Refresh the page in a moment — if it keeps failing, the service may be temporarily unavailable.',
+        primary:   { label: 'Try again',   href: window.location.href },
+        secondary: { label: 'Back to home', href: '/' },
+      });
+    }
+
+    function buildPills(identity) {
+      if (!identity) return '';
+      const items = [];
+      if (identity.goal)  items.push({ lbl: 'Goal',  val: titleCase(identity.goal) });
+      if (identity.level) items.push({ lbl: 'Level', val: titleCase(identity.level) });
+      if (identity.trainingDaysPerWeek) {
+        items.push({
+          lbl: 'Plan',
+          val: `${identity.trainingDaysPerWeek}×/wk` +
+            (identity.sessionMinutes ? ` · ${identity.sessionMinutes}m` : ''),
+        });
+      }
+      if (identity.weightStartKg && identity.weightTargetKg) {
+        items.push({
+          lbl: 'Weight',
+          val: `${Math.round(identity.weightStartKg)} → ${Math.round(identity.weightTargetKg)} kg`,
+        });
+      } else if (identity.weightTargetKg) {
+        items.push({ lbl: 'Target', val: `${Math.round(identity.weightTargetKg)} kg` });
+      }
+      if (!items.length) return '';
+      return `<div class="pills">` +
+        items.map(p =>
+          `<span class="pill"><span class="pill-lbl">${escapeHtml(p.lbl)}</span><span class="pill-rule"></span>${escapeHtml(p.val)}</span>`
+        ).join('') +
+        `</div>`;
+    }
+
+    function buildTotals(totals) {
+      if (!totals) return '';
+      const items = [];
+      if (totals.sessions != null) items.push({ num: totals.sessions, lbl: 'Sessions' });
+      if (totals.currentStreakDays != null && totals.currentStreakDays > 0) {
+        items.push({ num: totals.currentStreakDays, lbl: 'Day streak' });
+      }
+      if (totals.weekIndex != null && totals.weekTarget != null) {
+        items.push({ num: `${totals.weekIndex}/${totals.weekTarget}`, lbl: 'This week' });
+      }
+      if (totals.prCount != null && totals.prCount > 0) {
+        items.push({ num: totals.prCount, lbl: 'PRs' });
+      }
+      if (!items.length) return '';
+      return `<div class="totals">` +
+        items.map(t =>
+          `<div class="total"><div class="total-num">${escapeHtml(t.num)}</div><div class="total-lbl">${escapeHtml(t.lbl)}</div></div>`
+        ).join('') +
+        `</div>`;
+    }
+
+    function buildPosts(posts) {
+      if (!posts || !posts.length) return '';
+      const cards = posts.map(p => {
+        const stats = (p.topStats && p.topStats.length)
+          ? p.topStats
+          : [
+              p.durationSeconds ? formatDuration(p.durationSeconds) : null,
+              p.totalVolumeKg   ? formatVolume(p.totalVolumeKg)     : null,
+              p.totalSets       ? `${p.totalSets} sets`             : null,
+            ].filter(Boolean);
+
+        const media = p.mediaUrl
+          ? `<img class="post-media" src="${escapeHtml(p.mediaUrl)}" alt="" loading="lazy">`
+          : '';
+
+        const caption = p.caption && p.caption.trim()
+          ? `<div class="post-caption">${escapeHtml(p.caption.trim())}</div>`
+          : '';
+
+        const engagement = (p.likeCount || p.commentCount)
+          ? `<div class="post-engagement">
+               ${p.likeCount    ? `<span>♥ ${p.likeCount}</span>`    : ''}
+               ${p.commentCount ? `<span>💬 ${p.commentCount}</span>` : ''}
+             </div>`
+          : '';
+
+        return `
+          <article class="post">
+            ${media}
+            <div class="post-body">
+              <div class="post-title">${escapeHtml(p.workoutName || 'Workout')}</div>
+              <div class="post-meta">${escapeHtml(relativeTime(p.createdAt))}</div>
+              <div class="post-stats">
+                ${stats.map(s => `<span class="stat-chip">${escapeHtml(s)}</span>`).join('')}
+              </div>
+              ${caption}
+              ${engagement}
+            </div>
+          </article>`;
+      }).join('');
+      return `
+        <div class="section-head">Recent workouts</div>
+        ${cards}`;
+    }
+
+    function buildConnect(profile) {
+      const name = profile.displayName || profile.username;
+      const handle = profile.username;
+      const universalLink = `https://repwiser.fit/u/${encodeURIComponent(handle)}`;
+      return `
+        <section class="connect">
+          <h2>Connect with <em>${escapeHtml(name)}</em></h2>
+          <p>Get RepWiser on iPhone to follow @${escapeHtml(handle)} and share your own training.</p>
+          <div class="connect-row">
+            <a class="btn btn-primary" href="${APP_STORE_URL}" target="_blank" rel="noopener">Get on App Store</a>
+            <a class="btn btn-secondary" href="${universalLink}">Open in RepWiser</a>
+          </div>
+        </section>`;
+    }
+
+    function renderProfile(payload) {
+      const profile = payload.profile || {};
+      const name = profile.displayName || profile.username || 'Athlete';
+      const handle = profile.username || '';
+      const bio = (profile.bio || '').trim();
+      const loc = locationText(profile.location);
+
+      // Update <title> + OG meta. Keeps tab labels useful and gives
+      // re-shared links a slightly better unfurl when the page is the
+      // 200 variant (/u/?username=...). The 404.html path keeps generic
+      // OG since the unfurler doesn't run JS.
+      document.title = `${name} on RepWiser`;
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute('content', `${name} on RepWiser`);
+
+      const avatarHtml = profile.avatarUrl
+        ? `<img src="${escapeHtml(profile.avatarUrl)}" alt="${escapeHtml(name)}'s avatar" referrerpolicy="no-referrer">`
+        : escapeHtml(initialsFor(name, handle));
+
+      const root = document.getElementById('root');
+      root.innerHTML = `
+        <section class="identity">
+          <div class="avatar">${avatarHtml}</div>
+          <div class="display-name">${escapeHtml(name)}</div>
+          ${handle ? `<div class="handle">@${escapeHtml(handle)}</div>` : ''}
+          ${bio  ? `<div class="bio">${escapeHtml(bio)}</div>`         : ''}
+          ${loc  ? `<div class="location">📍 ${escapeHtml(loc)}</div>` : ''}
+          ${buildPills(profile.trainingIdentity)}
+        </section>
+        ${buildTotals(profile.totals)}
+        <div id="progress"></div>
+        ${buildPosts(payload.recentPosts)}
+        ${buildConnect(profile)}`;
+    }
+
+    // ── Fetch ──────────────────────────────────────────────────────
+
+    async function loadProfile(username) {
+      const url = FN + '?username=' + encodeURIComponent(username);
+      let response;
+      try {
+        response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+          },
+        });
+      } catch (e) {
+        renderError();
+        return;
+      }
+
+      if (response.status === 404) { renderNotFound(username); return; }
+      if (response.status === 410) { renderDisabled(); return; }
+      if (!response.ok) { renderError(); return; }
+
+      let payload;
+      try { payload = await response.json(); }
+      catch (e) { renderError(); return; }
+
+      if (!payload || !payload.profile) { renderError(); return; }
+      renderProfile(payload);
+    }
+
+    // ── Bootstrap ──────────────────────────────────────────────────
+
+    (function () {
+      const username = extractUsername();
+      if (!username) {
+        renderEmptyUsername();
+        return;
+      }
+      // Canonical-form sanity check: usernames are lowercase
+      // alphanumeric+underscore (per social_profiles constraint). Bail
+      // on anything else before it hits the function — keeps the URL
+      // bar looking right for /u/<weird>.
+      if (!/^[a-z0-9_]{2,32}$/.test(username)) {
+        renderNotFound(username);
+        return;
+      }
+      loadProfile(username);
+    })();
+  </script>
+</body>
+</html>
