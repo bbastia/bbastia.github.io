@@ -8,17 +8,16 @@
   <meta name="theme-color" content="#0b0d0c">
   <meta name="robots" content="noindex">
 
-  <!-- Open Graph (used when /u/<username> URLs are pasted into iMessage,
-       WhatsApp, Twitter, etc.). The values are intentionally generic —
-       GitHub Pages can't render dynamic per-user OG cards without a
-       build step. The recipient still gets a useful "RepWiser profile"
-       unfurl with brand imagery. -->
+  <!-- Generic OG meta. We can't render dynamic per-user OG cards on
+       GitHub Pages; the static image at /og/share-default.svg is on-brand
+       enough that even the best-effort unfurl looks intentional. -->
   <meta property="og:title" content="A RepWiser training profile">
   <meta property="og:description" content="See goal, plan, and recent workouts. Get RepWiser to follow.">
   <meta property="og:url" content="https://repwiser.fit/u/">
   <meta property="og:type" content="profile">
   <meta property="og:site_name" content="RepWiser">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://repwiser.fit/og/share-default.svg">
+  <meta name="twitter:card" content="summary_large_image">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,10 +38,9 @@
       --amber-h:   #f8b93d;
       --amber-glo: rgba(245,165,33,0.14);
       --amber-dk:  rgba(245,165,33,0.08);
-      --forest:    #182a22;
-      --forest2:   #1f3a2e;
       --green:     #5dac83;
       font-family: 'Outfit', sans-serif;
+      font-feature-settings: "ss01", "cv11";
       color-scheme: dark;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -66,7 +64,9 @@
       z-index: 9999;
     }
 
-    /* Ambient orbs */
+    /* Ambient orbs — the same component used on landing. Empty/error
+       states keep them; the populated profile state keeps them too,
+       just at lower opacity so they don't compete with content. */
     .orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
     .orb { position: absolute; border-radius: 50%; filter: blur(90px); }
     .orb-1 {
@@ -117,41 +117,93 @@
     }
     .nav-cta:hover { background: var(--amber-h); transform: translateY(-1px); }
 
-    /* Sections */
     main { padding: 28px 0 96px; }
 
-    /* Identity hero */
+    /* ── Identity hero ─────────────────────────────────────────────── */
     .identity {
       display: flex; flex-direction: column; align-items: center;
-      text-align: center; gap: 10px; padding: 18px 0 22px;
+      text-align: center; gap: 10px; padding: 26px 0 22px;
+      position: relative;
     }
-    .avatar {
-      width: 96px; height: 96px; border-radius: 50%;
-      background: linear-gradient(160deg, var(--s2), var(--s3));
-      border: 1px solid var(--border);
+
+    /* Soft halo behind the avatar — same .phone-glow pattern from landing.
+       Layered with the conic ring so the avatar feels lit, not pasted. */
+    .avatar-stage {
+      position: relative;
+      width: 112px; height: 112px;
       display: grid; place-items: center;
-      font-size: 36px; font-weight: 700; color: var(--amber);
+      isolation: isolate; /* contain z-index of the halo */
+    }
+    .avatar-stage::before {
+      content: '';
+      position: absolute;
+      width: 220px; height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245,165,33,0.20) 0%, transparent 60%);
+      filter: blur(38px);
+      z-index: 0;
+      animation: glowPulse 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes glowPulse {
+      0%,100% { opacity: 0.55; transform: scale(1); }
+      50%     { opacity: 0.85; transform: scale(1.06); }
+    }
+
+    /* Conic gradient ring around the avatar. The ring is the 2px padding
+       between this wrapper and the inner .avatar circle. */
+    .avatar-ring {
+      position: relative; z-index: 1;
+      width: 104px; height: 104px;
+      border-radius: 50%;
+      padding: 2px;
+      background: conic-gradient(
+        from 200deg,
+        var(--amber) 0deg,
+        rgba(93,172,131,0.45) 140deg,
+        rgba(245,165,33,0.18) 240deg,
+        var(--amber) 360deg
+      );
+      animation: ringSpin 24s linear infinite;
+    }
+    @keyframes ringSpin { to { transform: rotate(360deg); } }
+    .avatar {
+      width: 100%; height: 100%; border-radius: 50%;
+      background: linear-gradient(160deg, var(--s2), var(--s3));
+      display: grid; place-items: center;
+      font-size: 38px; font-weight: 700; color: var(--amber);
       letter-spacing: -0.02em;
       box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
       overflow: hidden;
+      /* Counter-rotate to keep initials upright while the ring spins. */
+      animation: ringSpin 24s linear infinite reverse;
     }
-    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .avatar img {
+      width: 100%; height: 100%; object-fit: cover;
+      animation: ringSpin 24s linear infinite; /* counter the wrapper's reverse */
+    }
+
     .display-name {
-      font-size: clamp(28px, 4.5vw, 36px);
-      font-weight: 800; letter-spacing: -0.03em; line-height: 1.05;
-      margin-top: 12px;
-    }
-    .display-name em {
-      font-family: 'Instrument Serif', serif; font-style: italic;
-      font-weight: 400; color: var(--amber);
+      font-size: clamp(30px, 5.2vw, 40px);
+      font-weight: 800; letter-spacing: -0.035em; line-height: 1.02;
+      margin-top: 14px;
     }
     .handle {
+      display: inline-flex; align-items: center; gap: 6px;
       color: var(--muted); font-size: 14px; font-weight: 500;
-      letter-spacing: 0;
+      cursor: pointer; padding: 4px 10px; border-radius: 999px;
+      transition: background 0.15s, color 0.15s;
+      user-select: none;
     }
+    .handle:hover { background: var(--s2); color: var(--text); }
+    .handle .copy-glyph {
+      width: 12px; height: 12px; opacity: 0.55;
+      transition: opacity 0.15s;
+    }
+    .handle:hover .copy-glyph { opacity: 1; }
     .bio {
       color: var(--muted); font-size: 14.5px; line-height: 1.55;
-      max-width: 460px; margin-top: 8px; padding: 0 12px;
+      max-width: 480px; margin-top: 10px; padding: 0 12px;
     }
     .location {
       display: inline-flex; align-items: center; gap: 6px;
@@ -159,67 +211,120 @@
       margin-top: 4px;
     }
 
-    /* Identity pills (goal/level/plan/etc.) */
+    /* Toast that appears after click-to-copy on @handle. */
+    .toast {
+      position: fixed; left: 50%; top: 32px;
+      transform: translate(-50%, -16px);
+      background: var(--s2); color: var(--text);
+      border: 1px solid var(--bup);
+      padding: 10px 16px; border-radius: 12px;
+      font-size: 13px; font-weight: 600;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 200;
+    }
+    .toast.is-visible {
+      opacity: 1; transform: translate(-50%, 0);
+    }
+
+    /* ── Identity pills ─────────────────────────────────────────────── */
     .pills {
       display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
       margin-top: 18px; padding: 0 8px;
     }
     .pill {
-      display: inline-flex; align-items: center; gap: 6px;
+      display: inline-flex; align-items: center; gap: 8px;
       background: var(--s1); border: 1px solid var(--border);
-      padding: 7px 12px; border-radius: 999px;
+      padding: 8px 14px; border-radius: 999px;
       font-size: 12.5px; font-weight: 600; color: var(--text);
+      font-variant-numeric: tabular-nums;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .pill:hover { border-color: var(--bup); background: var(--s2); }
+    .pill .pill-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 8px rgba(245,165,33,0.55);
     }
     .pill .pill-lbl { color: var(--muted); font-weight: 500; }
-    .pill .pill-rule { width: 4px; height: 4px; border-radius: 50%; background: var(--muted2); }
+    .pill .pill-rule {
+      width: 3px; height: 3px; border-radius: 50%; background: var(--muted2);
+    }
 
-    /* Totals strip */
+    /* ── Totals strip ───────────────────────────────────────────────── */
     .totals {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 10px; margin-top: 24px;
+      gap: 10px; margin-top: 28px;
     }
     .total {
       background: var(--s1); border: 1px solid var(--border);
-      border-radius: 14px; padding: 16px 14px;
+      border-radius: 14px; padding: 18px 14px;
       display: flex; flex-direction: column; gap: 4px;
       text-align: center;
+      transition: border-color 0.18s ease, transform 0.18s ease;
     }
+    .total:hover { border-color: var(--bup); transform: translateY(-2px); }
     .total .total-num {
-      font-size: 26px; font-weight: 700; color: var(--text);
-      letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+      font-size: 28px; font-weight: 800; color: var(--text);
+      letter-spacing: -0.025em; font-variant-numeric: tabular-nums;
+      line-height: 1;
     }
     .total .total-lbl {
-      font-size: 11px; font-weight: 600; color: var(--muted);
+      font-size: 11px; font-weight: 700; color: var(--muted);
       letter-spacing: 0.07em; text-transform: uppercase;
+      margin-top: 2px;
     }
 
-    /* Section headings */
+    /* ── Section heading ────────────────────────────────────────────── */
     .section-head {
-      display: flex; align-items: center; gap: 8px;
-      margin: 36px 0 14px;
+      display: flex; align-items: center; gap: 10px;
+      margin: 44px 0 16px;
       font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
       color: var(--amber); opacity: 0.85;
     }
     .section-head::before {
-      content: ''; width: 16px; height: 1.5px;
+      content: ''; width: 18px; height: 1.5px;
       background: var(--amber); border-radius: 1px;
     }
 
-    /* Recent workouts */
+    /* ── Recent workout cards ───────────────────────────────────────── */
     .post {
       background: var(--s1); border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden; margin-bottom: 12px;
-      transition: border-color 0.15s, transform 0.15s;
+      border-radius: 18px; overflow: hidden; margin-bottom: 12px;
+      transition: border-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+      animation: postIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+      animation-delay: calc(60ms * var(--stagger, 0));
     }
-    .post:hover { border-color: var(--bup); transform: translateY(-1px); }
+    .post:hover {
+      border-color: var(--bup); transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+    }
+    @keyframes postIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .post-media-wrap {
+      position: relative;
+      width: 100%; aspect-ratio: 16/9;
+      background: var(--s2); overflow: hidden;
+    }
     .post-media {
-      width: 100%; aspect-ratio: 16/9; background: var(--s2);
+      width: 100%; height: 100%;
       object-fit: cover; display: block;
+    }
+    /* Bottom gradient — keeps the title legible regardless of media. */
+    .post-media-wrap::after {
+      content: '';
+      position: absolute; left: 0; right: 0; bottom: 0;
+      height: 50%;
+      background: linear-gradient(180deg, transparent 0%, rgba(11,13,12,0.7) 100%);
+      pointer-events: none;
     }
     .post-body { padding: 14px 16px 16px; }
     .post-title {
       font-size: 17px; font-weight: 700; color: var(--text);
-      letter-spacing: -0.01em; margin-bottom: 4px;
+      letter-spacing: -0.015em; margin-bottom: 4px;
     }
     .post-meta {
       font-size: 12px; color: var(--muted); font-weight: 500;
@@ -232,6 +337,11 @@
       padding: 5px 10px; border-radius: 8px;
       font-size: 12px; font-weight: 600; color: var(--text);
       font-variant-numeric: tabular-nums;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .stat-chip:hover {
+      border-color: rgba(245,165,33,0.25);
+      box-shadow: 0 0 0 3px rgba(245,165,33,0.06);
     }
     .post-engagement {
       display: flex; gap: 14px; margin-top: 12px;
@@ -243,18 +353,29 @@
       margin-top: 8px;
     }
 
-    /* Connect CTA block */
+    /* ── Connect / install CTA ──────────────────────────────────────── */
     .connect {
-      margin-top: 36px; padding: 26px 22px 28px;
+      margin-top: 40px; padding: 30px 24px 32px;
       background: linear-gradient(160deg, var(--s2), var(--s1));
-      border: 1px solid rgba(245,165,33,0.16);
-      border-radius: 18px;
+      border: 1px solid rgba(245,165,33,0.18);
+      border-radius: 22px;
       text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      box-shadow: 0 14px 50px rgba(0,0,0,0.32);
+      position: relative; overflow: hidden;
+    }
+    /* Subtle amber glow inside the connect block */
+    .connect::before {
+      content: '';
+      position: absolute; top: -60px; left: 50%; transform: translateX(-50%);
+      width: 300px; height: 200px;
+      background: radial-gradient(ellipse, rgba(245,165,33,0.16) 0%, transparent 60%);
+      pointer-events: none;
+      filter: blur(20px);
     }
     .connect h2 {
-      font-size: 22px; font-weight: 700; letter-spacing: -0.02em;
-      margin-bottom: 6px;
+      font-size: 24px; font-weight: 800; letter-spacing: -0.025em;
+      margin-bottom: 6px; line-height: 1.1;
+      position: relative;
     }
     .connect h2 em {
       font-family: 'Instrument Serif', serif; font-style: italic;
@@ -262,11 +383,42 @@
     }
     .connect p {
       color: var(--muted); font-size: 14px; line-height: 1.55;
-      margin-bottom: 18px;
+      margin-bottom: 20px; position: relative;
     }
     .connect-row {
       display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+      position: relative;
     }
+
+    /* App Store badge — same component as landing for visual consistency. */
+    .app-store-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #000; color: #fff;
+      padding: 9px 18px; border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.18);
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+      font-family: inherit;
+    }
+    .app-store-badge:hover {
+      border-color: rgba(255,255,255,0.32);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 26px rgba(0,0,0,0.4);
+    }
+    .app-store-badge svg.apple-glyph {
+      width: 22px; height: 26px; flex-shrink: 0; fill: #fff;
+    }
+    .app-store-badge .badge-lines {
+      display: flex; flex-direction: column; gap: 1px; line-height: 1;
+      text-align: left;
+    }
+    .app-store-badge .badge-pre {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.02em; opacity: 0.85;
+    }
+    .app-store-badge .badge-name {
+      font-size: 18px; font-weight: 600; letter-spacing: -0.01em;
+    }
+
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
       padding: 12px 22px; border-radius: 12px;
@@ -274,54 +426,63 @@
       transition: all 0.18s ease; cursor: pointer; border: none;
       font-family: inherit;
     }
-    .btn-primary {
-      background: var(--amber); color: #14100a;
-      box-shadow: 0 8px 26px rgba(245,165,33,0.28);
-    }
-    .btn-primary:hover { background: var(--amber-h); transform: translateY(-1px); }
     .btn-secondary {
       background: var(--s2); color: var(--text);
       border: 1px solid var(--border);
     }
     .btn-secondary:hover { background: var(--s3); border-color: var(--bup); }
 
-    /* Skeleton state (visible until JS replaces it) */
-    .skeleton-bar {
+    /* ── Skeleton (layout-shape, not generic bars) ──────────────────── */
+    .sk { animation: shimmer 1.4s ease-in-out infinite;
       background: linear-gradient(90deg, var(--s2) 0%, var(--s3) 50%, var(--s2) 100%);
       background-size: 200% 100%;
-      animation: shimmer 1.4s ease-in-out infinite;
       border-radius: 8px;
     }
     @keyframes shimmer {
       0%   { background-position: 100% 0; }
       100% { background-position: -100% 0; }
     }
-    .sk-avatar { width: 96px; height: 96px; border-radius: 50%; }
-    .sk-line   { height: 14px; }
+    .sk-avatar { width: 104px; height: 104px; border-radius: 50%; }
+    .sk-name   { width: 220px; height: 30px; margin-top: 14px; border-radius: 10px; }
+    .sk-handle { width: 130px; height: 16px; margin-top: 8px; }
+    .sk-pill   { width: 92px; height: 32px; border-radius: 999px; }
 
-    /* Empty / error state */
+    /* ── Empty / error state ────────────────────────────────────────── */
     .state {
-      text-align: center; padding: 56px 20px;
+      text-align: center; padding: 64px 20px 56px;
+      position: relative;
     }
     .state-icon {
-      width: 64px; height: 64px; border-radius: 16px;
-      display: grid; place-items: center; margin: 0 auto 16px;
-      background: var(--s1); border: 1px solid var(--border);
-      font-size: 28px; color: var(--amber);
+      width: 72px; height: 72px; border-radius: 18px;
+      display: grid; place-items: center; margin: 0 auto 20px;
+      background: linear-gradient(160deg, var(--s2), var(--s3));
+      border: 1px solid var(--border);
+      font-size: 30px; color: var(--amber);
+      font-weight: 700;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+      position: relative;
+    }
+    .state-icon::after {
+      content: '';
+      position: absolute; inset: -16px;
+      border-radius: 22px;
+      background: radial-gradient(circle, var(--amber-glo) 0%, transparent 60%);
+      filter: blur(18px);
+      z-index: -1;
     }
     .state h2 {
-      font-size: 22px; font-weight: 700; letter-spacing: -0.02em;
-      margin-bottom: 8px;
+      font-size: 24px; font-weight: 800; letter-spacing: -0.025em;
+      margin-bottom: 10px; line-height: 1.1;
     }
     .state p {
       color: var(--muted); font-size: 14.5px; line-height: 1.55;
-      max-width: 380px; margin: 0 auto 22px;
+      max-width: 380px; margin: 0 auto 24px;
     }
 
-    /* Footer */
+    /* ── Footer ─────────────────────────────────────────────────────── */
     footer {
       border-top: 1px solid var(--border);
-      padding: 22px 0; margin-top: 36px;
+      padding: 22px 0; margin-top: 40px;
       font-size: 12px; color: var(--muted2);
     }
     .footer-inner {
@@ -331,9 +492,25 @@
     .footer-links { display: flex; gap: 18px; }
     .footer-links a:hover { color: var(--text); }
 
+    /* ── Reduced motion ─────────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .avatar-ring, .avatar, .avatar img { animation: none !important; }
+      .avatar-stage::before { animation: none !important; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ── Responsive ─────────────────────────────────────────────────── */
     @media (max-width: 540px) {
       .totals { grid-template-columns: repeat(2, 1fr); }
-      .post-media { aspect-ratio: 4/3; }
+      .post-media-wrap { aspect-ratio: 4/3; }
+      .display-name { font-size: 28px; }
+      .connect-row { flex-direction: column; }
+      .app-store-badge, .btn { width: 100%; justify-content: center; }
     }
   </style>
 </head>
@@ -358,18 +535,29 @@
   </header>
 
   <main class="wrap" id="root">
-    <!-- Skeleton (shown until the fetch resolves). Replaced by JS. -->
-    <section class="identity" id="skeleton">
-      <div class="skeleton-bar sk-avatar"></div>
-      <div class="skeleton-bar sk-line" style="width:200px; height:24px; margin-top:6px;"></div>
-      <div class="skeleton-bar sk-line" style="width:120px; margin-top:4px;"></div>
+    <!-- Layout-shape skeleton. Mirrors the actual identity hero so first
+         paint doesn't reflow when JS swaps the content in. -->
+    <section class="identity" id="skeleton" aria-hidden="true">
+      <div class="avatar-stage">
+        <div class="avatar-ring sk" style="padding:0;"></div>
+      </div>
+      <div class="sk sk-name"></div>
+      <div class="sk sk-handle"></div>
       <div class="pills" style="margin-top:18px;">
-        <div class="skeleton-bar" style="width:88px; height:30px; border-radius:999px;"></div>
-        <div class="skeleton-bar" style="width:108px; height:30px; border-radius:999px;"></div>
-        <div class="skeleton-bar" style="width:72px; height:30px; border-radius:999px;"></div>
+        <div class="sk sk-pill"></div>
+        <div class="sk sk-pill"></div>
+        <div class="sk sk-pill"></div>
       </div>
     </section>
   </main>
+
+  <noscript>
+    <div style="text-align:center; padding:48px 22px; color:rgba(237,232,224,0.7);">
+      Enable JavaScript to view this RepWiser profile, or open this link on your iPhone with the RepWiser app installed.
+    </div>
+  </noscript>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Link copied</div>
 
   <footer>
     <div class="wrap footer-inner">
@@ -398,10 +586,11 @@
     // Either way, JS reads the username from the URL, calls the
     // public-profile-by-username Edge Function (anon-allowed), and
     // renders the resulting profile inline. The Edge Function is the
-    // *only* privacy boundary — this page just renders what comes
-    // back. See supabase/functions/public-profile-by-username/index.ts
-    // for what's filtered server-side (visibility=everyone only,
-    // signed media URLs, 410 when toggled off).
+    // *only* privacy boundary — this page just renders what comes back.
+    //
+    // SHARED — keep in sync with /404.html. The two files have nearly
+    // identical render code; if you change the layout / formatters /
+    // states here, mirror in 404.html.
     // ─────────────────────────────────────────────────────────────────
 
     const SUPABASE_URL = 'https://wqnbhfkrtfzniaibsvfa.supabase.co';
@@ -412,13 +601,22 @@
     const APP_STORE_URL = 'https://apps.apple.com/app/repwiser/id6744890930';
     const FN = SUPABASE_URL + '/functions/v1/public-profile-by-username';
 
-    // Pull username from the URL. Two cases we have to handle:
-    //   1. /u/<username>  (path-based — preferred share format from iOS)
-    //   2. /u/?u=<u> or /u/?username=<u> (query fallback if needed)
+    // App Store badge — re-used across landing + connect block. Inline
+    // so a render that fails partway still ships the brand mark.
+    const APP_STORE_BADGE_HTML = `
+      <a class="app-store-badge" href="${APP_STORE_URL}" target="_blank" rel="noopener" aria-label="Download on the App Store">
+        <svg class="apple-glyph" viewBox="0 0 384 512" aria-hidden="true">
+          <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+        </svg>
+        <span class="badge-lines">
+          <span class="badge-pre">Download on the</span>
+          <span class="badge-name">App Store</span>
+        </span>
+      </a>`;
+
     function extractUsername() {
       const path = window.location.pathname.replace(/\/+$/, '');
       const parts = path.split('/').filter(Boolean);
-      // ['u'] → no username; ['u', 'poorna'] → 'poorna'; deeper → still take 'poorna'
       if (parts.length >= 2 && parts[0].toLowerCase() === 'u') {
         return parts[1].toLowerCase();
       }
@@ -428,30 +626,22 @@
     }
 
     // ── Formatters ──────────────────────────────────────────────────
-
     function escapeHtml(value) {
       if (value == null) return '';
       return String(value)
         .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
-
     function titleCase(slug) {
       if (!slug) return '';
-      return slug.replace(/[_-]+/g, ' ')
-        .replace(/\b\w/g, c => c.toUpperCase())
-        .trim();
+      return slug.replace(/[_-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase()).trim();
     }
-
     function initialsFor(name, username) {
       const source = (name || username || 'R').trim();
       const parts = source.split(/\s+/);
-      if (parts.length >= 2) {
-        return (parts[0][0] + parts[1][0]).toUpperCase();
-      }
+      if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
       return source.slice(0, 2).toUpperCase();
     }
-
     function formatDuration(seconds) {
       if (seconds == null || isNaN(seconds)) return '';
       const total = Math.max(0, Math.round(seconds));
@@ -460,14 +650,12 @@
       if (h > 0) return `${h}h ${m}m`;
       return `${m}m`;
     }
-
     function formatVolume(kg) {
       if (kg == null || isNaN(kg)) return '';
       const value = Number(kg);
       if (value >= 1000) return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'k kg';
       return Math.round(value) + ' kg';
     }
-
     function relativeTime(iso) {
       if (!iso) return '';
       const then = new Date(iso).getTime();
@@ -479,7 +667,6 @@
       if (diff < week) return Math.floor(diff / day) + 'd ago';
       return Math.floor(diff / week) + 'w ago';
     }
-
     function locationText(loc) {
       if (!loc) return '';
       const parts = [loc.city, loc.state, loc.country]
@@ -487,18 +674,33 @@
       return parts.join(', ');
     }
 
-    // ── Renderers ──────────────────────────────────────────────────
+    // ── Toast (used by handle copy) ─────────────────────────────────
+    let toastTimer = null;
+    function showToast(text) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = text;
+      t.classList.add('is-visible');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('is-visible'), 1800);
+    }
 
+    // ── Renderers ──────────────────────────────────────────────────
     function renderState(opts) {
       const { icon, title, body, primary, secondary } = opts;
       const root = document.getElementById('root');
+      const primaryHtml = primary
+        ? (primary.kind === 'badge'
+            ? APP_STORE_BADGE_HTML
+            : `<a class="btn btn-primary app-store-badge" href="${primary.href}" style="background:var(--amber); color:#14100a; border-color:transparent;">${escapeHtml(primary.label)}</a>`)
+        : '';
       root.innerHTML = `
         <section class="state">
           <div class="state-icon">${icon || '·'}</div>
           <h2>${escapeHtml(title)}</h2>
           <p>${escapeHtml(body)}</p>
-          <div class="connect-row">
-            ${primary ? `<a class="btn btn-primary" href="${primary.href}">${escapeHtml(primary.label)}</a>` : ''}
+          <div class="connect-row" style="justify-content:center;">
+            ${primaryHtml}
             ${secondary ? `<a class="btn btn-secondary" href="${secondary.href}">${escapeHtml(secondary.label)}</a>` : ''}
           </div>
         </section>`;
@@ -509,37 +711,34 @@
         icon: '@',
         title: 'Looking for someone?',
         body: 'RepWiser profiles live at repwiser.fit/u/<username>. Open the full link your friend sent you, or grab the app to find them inside RepWiser.',
-        primary:   { label: 'Get RepWiser',     href: APP_STORE_URL },
-        secondary: { label: 'Back to home',     href: '/' },
+        primary:   { kind: 'badge' },
+        secondary: { label: 'Back to home', href: '/' },
       });
     }
-
     function renderNotFound(username) {
       renderState({
         icon: '?',
         title: 'Profile not found',
         body: `We couldn't find @${username || 'that user'} on RepWiser. The username may have changed or the account may have been deleted.`,
-        primary:   { label: 'Get RepWiser', href: APP_STORE_URL },
+        primary:   { kind: 'badge' },
         secondary: { label: 'Back to home', href: '/' },
       });
     }
-
     function renderDisabled() {
       renderState({
         icon: '🔒',
         title: 'This profile is no longer public',
         body: 'The athlete who shared this link has turned off their public profile page. Get RepWiser to discover other lifters and follow them inside the app.',
-        primary:   { label: 'Get RepWiser', href: APP_STORE_URL },
+        primary:   { kind: 'badge' },
         secondary: { label: 'Back to home', href: '/' },
       });
     }
-
     function renderError() {
       renderState({
         icon: '!',
         title: "We couldn't load this profile",
         body: 'Something went wrong reaching RepWiser. Refresh the page in a moment — if it keeps failing, the service may be temporarily unavailable.',
-        primary:   { label: 'Try again',   href: window.location.href },
+        primary:   { kind: 'link', label: 'Try again', href: window.location.href },
         secondary: { label: 'Back to home', href: '/' },
       });
     }
@@ -547,27 +746,29 @@
     function buildPills(identity) {
       if (!identity) return '';
       const items = [];
-      if (identity.goal)  items.push({ lbl: 'Goal',  val: titleCase(identity.goal) });
-      if (identity.level) items.push({ lbl: 'Level', val: titleCase(identity.level) });
+      if (identity.goal)  items.push({ lbl: 'Goal',  val: titleCase(identity.goal),  dot: true });
+      if (identity.level) items.push({ lbl: 'Level', val: titleCase(identity.level), dot: true });
       if (identity.trainingDaysPerWeek) {
         items.push({
           lbl: 'Plan',
           val: `${identity.trainingDaysPerWeek}×/wk` +
             (identity.sessionMinutes ? ` · ${identity.sessionMinutes}m` : ''),
+          dot: true,
         });
       }
       if (identity.weightStartKg && identity.weightTargetKg) {
         items.push({
           lbl: 'Weight',
           val: `${Math.round(identity.weightStartKg)} → ${Math.round(identity.weightTargetKg)} kg`,
+          dot: true,
         });
       } else if (identity.weightTargetKg) {
-        items.push({ lbl: 'Target', val: `${Math.round(identity.weightTargetKg)} kg` });
+        items.push({ lbl: 'Target', val: `${Math.round(identity.weightTargetKg)} kg`, dot: true });
       }
       if (!items.length) return '';
       return `<div class="pills">` +
         items.map(p =>
-          `<span class="pill"><span class="pill-lbl">${escapeHtml(p.lbl)}</span><span class="pill-rule"></span>${escapeHtml(p.val)}</span>`
+          `<span class="pill">${p.dot ? `<span class="pill-dot"></span>` : ''}<span class="pill-lbl">${escapeHtml(p.lbl)}</span><span class="pill-rule"></span>${escapeHtml(p.val)}</span>`
         ).join('') +
         `</div>`;
     }
@@ -595,7 +796,7 @@
 
     function buildPosts(posts) {
       if (!posts || !posts.length) return '';
-      const cards = posts.map(p => {
+      const cards = posts.map((p, idx) => {
         const stats = (p.topStats && p.topStats.length)
           ? p.topStats
           : [
@@ -605,7 +806,7 @@
             ].filter(Boolean);
 
         const media = p.mediaUrl
-          ? `<img class="post-media" src="${escapeHtml(p.mediaUrl)}" alt="" loading="lazy">`
+          ? `<div class="post-media-wrap"><img class="post-media" src="${escapeHtml(p.mediaUrl)}" alt="" loading="lazy" referrerpolicy="no-referrer"></div>`
           : '';
 
         const caption = p.caption && p.caption.trim()
@@ -620,7 +821,7 @@
           : '';
 
         return `
-          <article class="post">
+          <article class="post" style="--stagger:${idx};">
             ${media}
             <div class="post-body">
               <div class="post-title">${escapeHtml(p.workoutName || 'Workout')}</div>
@@ -647,7 +848,7 @@
           <h2>Connect with <em>${escapeHtml(name)}</em></h2>
           <p>Get RepWiser on iPhone to follow @${escapeHtml(handle)} and share your own training.</p>
           <div class="connect-row">
-            <a class="btn btn-primary" href="${APP_STORE_URL}" target="_blank" rel="noopener">Get on App Store</a>
+            ${APP_STORE_BADGE_HTML}
             <a class="btn btn-secondary" href="${universalLink}">Open in RepWiser</a>
           </div>
         </section>`;
@@ -660,13 +861,20 @@
       const bio = (profile.bio || '').trim();
       const loc = locationText(profile.location);
 
-      // Update <title> + OG meta. Keeps tab labels useful and gives
-      // re-shared links a slightly better unfurl when the page is the
-      // 200 variant (/u/?username=...). The 404.html path keeps generic
-      // OG since the unfurler doesn't run JS.
       document.title = `${name} on RepWiser`;
       const ogTitle = document.querySelector('meta[property="og:title"]');
       if (ogTitle) ogTitle.setAttribute('content', `${name} on RepWiser`);
+      // Best-effort canonical so unfurl bots that re-check after JS land
+      // on the proper URL (rather than e.g. the query-form fallback).
+      if (handle) {
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) {
+          canonical = document.createElement('link');
+          canonical.setAttribute('rel', 'canonical');
+          document.head.appendChild(canonical);
+        }
+        canonical.setAttribute('href', `https://repwiser.fit/u/${handle}`);
+      }
 
       const avatarHtml = profile.avatarUrl
         ? `<img src="${escapeHtml(profile.avatarUrl)}" alt="${escapeHtml(name)}'s avatar" referrerpolicy="no-referrer">`
@@ -675,9 +883,21 @@
       const root = document.getElementById('root');
       root.innerHTML = `
         <section class="identity">
-          <div class="avatar">${avatarHtml}</div>
+          <div class="avatar-stage">
+            <div class="avatar-ring">
+              <div class="avatar">${avatarHtml}</div>
+            </div>
+          </div>
           <div class="display-name">${escapeHtml(name)}</div>
-          ${handle ? `<div class="handle">@${escapeHtml(handle)}</div>` : ''}
+          ${handle ? `
+            <button class="handle" id="handleCopy" type="button" aria-label="Copy share link">
+              <span>@${escapeHtml(handle)}</span>
+              <svg class="copy-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+            </button>
+          ` : ''}
           ${bio  ? `<div class="bio">${escapeHtml(bio)}</div>`         : ''}
           ${loc  ? `<div class="location">📍 ${escapeHtml(loc)}</div>` : ''}
           ${buildPills(profile.trainingIdentity)}
@@ -686,10 +906,23 @@
         <div id="progress"></div>
         ${buildPosts(payload.recentPosts)}
         ${buildConnect(profile)}`;
+
+      // Wire up the handle copy-to-clipboard.
+      const handleBtn = document.getElementById('handleCopy');
+      if (handleBtn) {
+        handleBtn.addEventListener('click', async () => {
+          const url = `https://repwiser.fit/u/${handle}`;
+          try {
+            await navigator.clipboard.writeText(url);
+            showToast('Link copied');
+          } catch (e) {
+            showToast('Couldn\'t copy — long-press the link instead');
+          }
+        });
+      }
     }
 
     // ── Fetch ──────────────────────────────────────────────────────
-
     async function loadProfile(username) {
       const url = FN + '?username=' + encodeURIComponent(username);
       let response;
@@ -701,10 +934,7 @@
             'authorization': 'Bearer ' + SUPABASE_ANON_KEY,
           },
         });
-      } catch (e) {
-        renderError();
-        return;
-      }
+      } catch (e) { renderError(); return; }
 
       if (response.status === 404) { renderNotFound(username); return; }
       if (response.status === 410) { renderDisabled(); return; }
@@ -719,21 +949,12 @@
     }
 
     // ── Bootstrap ──────────────────────────────────────────────────
-
     (function () {
       const username = extractUsername();
-      if (!username) {
-        renderEmptyUsername();
-        return;
-      }
+      if (!username) { renderEmptyUsername(); return; }
       // Canonical-form sanity check: usernames are lowercase
-      // alphanumeric+underscore (per social_profiles constraint). Bail
-      // on anything else before it hits the function — keeps the URL
-      // bar looking right for /u/<weird>.
-      if (!/^[a-z0-9_]{2,32}$/.test(username)) {
-        renderNotFound(username);
-        return;
-      }
+      // alphanumeric+underscore (per social_profiles constraint).
+      if (!/^[a-z0-9_]{2,32}$/.test(username)) { renderNotFound(username); return; }
       loadProfile(username);
     })();
   </script>

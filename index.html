@@ -6,6 +6,17 @@
   <title>RepWiser — Train with a sharper plan</title>
   <meta name="description" content="RepWiser is an iPhone and Apple Watch workout coach for planning sessions, logging sets, tracking PRs, and understanding recovery.">
   <meta name="theme-color" content="#0b0d0c">
+
+  <!-- Open Graph (the landing page is the default unfurl target for any
+       repwiser.fit/* link that isn't a profile share). -->
+  <meta property="og:title" content="RepWiser — Train with a sharper plan">
+  <meta property="og:description" content="A coach-first workout app for iPhone and Apple Watch. Plan sessions, log sets without friction, track PRs, understand recovery.">
+  <meta property="og:url" content="https://repwiser.fit/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="RepWiser">
+  <meta property="og:image" content="https://repwiser.fit/og/share-default.svg">
+  <meta name="twitter:card" content="summary_large_image">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -28,6 +39,7 @@
       --forest2:   #1f3a2e;
       --green:     #5dac83;
       font-family: 'Outfit', sans-serif;
+      font-feature-settings: "ss01", "cv11";
       color-scheme: dark;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -77,6 +89,18 @@
       bottom: -100px; right: 20%;
       animation: drift1 20s ease-in-out infinite reverse;
     }
+    /* Cursor-tracked spotlight orb. JS toggles the
+       `is-active` class on viewports >= 900px when reduced-motion is
+       not requested; otherwise the rule never matches and the orb
+       stays invisible. */
+    .orb-cursor {
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(245,165,33,0.10) 0%, transparent 60%);
+      transform: translate3d(-1000px, -1000px, 0);
+      transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1), opacity 400ms ease;
+      opacity: 0;
+    }
+    .orb-cursor.is-active { opacity: 1; }
     @keyframes drift1 {
       0%,100% { transform: translate(0,0) scale(1); }
       50% { transform: translate(-60px,50px) scale(1.08); }
@@ -138,10 +162,10 @@
     .hero {
       min-height: calc(100svh - 68px);
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: 1.05fr 0.95fr;
       align-items: center;
       gap: 48px;
-      padding: 60px 0 72px;
+      padding: 60px 0 80px;
     }
     .hero-text { position: relative; }
     .eyebrow {
@@ -165,9 +189,9 @@
       50% { box-shadow: 0 0 0 5px rgba(245,165,33,0); }
     }
     h1 {
-      font-size: clamp(50px, 8vw, 88px);
+      font-size: clamp(50px, 8vw, 92px);
       font-weight: 800;
-      line-height: 0.96;
+      line-height: 0.94;
       letter-spacing: -0.04em;
       color: var(--text);
       margin-bottom: 22px;
@@ -184,8 +208,8 @@
       color: var(--muted);
       font-size: clamp(16px, 2vw, 19px);
       line-height: 1.65;
-      max-width: 540px;
-      margin-bottom: 34px;
+      max-width: 520px;
+      margin-bottom: 30px;
       animation: fadeUp 0.7s ease 0.28s both;
     }
     .cta-row {
@@ -198,6 +222,7 @@
       font-size: 14.5px; font-weight: 650;
       text-decoration: none; transition: all 0.18s ease; cursor: pointer;
       border: none;
+      font-family: inherit;
     }
     .btn-primary {
       background: var(--amber); color: #14100a;
@@ -209,28 +234,88 @@
       border: 1px solid var(--border);
     }
     .btn-secondary:hover { background: var(--s3); border-color: var(--bup); }
-    .hero-sub {
-      margin-top: 20px; font-size: 13px; color: var(--muted2);
+
+    /* App Store badge — recreation of Apple's "Download on the App Store"
+       black pill. Sized to sit alongside .btn-secondary at equal optical
+       weight. Layout matches Apple's marketing guidelines (corner radius,
+       proportional Apple-glyph + double-line text). */
+    .app-store-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: #000;
+      color: #fff;
+      padding: 9px 18px;
+      border-radius: 13px;
+      border: 1px solid rgba(255,255,255,0.18);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      will-change: transform;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04) inset;
+    }
+    .app-store-badge:hover {
+      border-color: rgba(255,255,255,0.32);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.08) inset;
+    }
+    .app-store-badge svg.apple-glyph { width: 22px; height: 26px; flex-shrink: 0; fill: #fff; }
+    .app-store-badge .badge-lines {
+      display: flex; flex-direction: column; gap: 1px; line-height: 1;
+    }
+    .app-store-badge .badge-pre {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.02em; opacity: 0.85;
+    }
+    .app-store-badge .badge-name {
+      font-size: 18px; font-weight: 600; letter-spacing: -0.01em;
+    }
+
+    /* Trust micro-line under the CTA row. Three short claims, dot-separated. */
+    .trust-line {
+      margin-top: 22px;
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+      font-size: 12px; font-weight: 500;
+      color: var(--muted);
       animation: fadeUp 0.7s ease 0.46s both;
     }
-    .hero-sub a { color: var(--muted); border-bottom: 1px solid var(--border); transition: color 0.15s; }
-    .hero-sub a:hover { color: var(--text); }
+    .trust-line .trust-dot {
+      width: 3px; height: 3px; border-radius: 50%;
+      background: var(--muted2); flex-shrink: 0;
+    }
 
-    /* ── Phone ── */
-    .phone-wrap {
-      display: flex; justify-content: center; align-items: center;
+    /* Star rating row. Five amber stars + a single-line attribution.
+       Marker comment in HTML notes how to swap to real App Store data. */
+    .star-row {
+      margin-top: 14px;
+      display: flex; align-items: center; gap: 10px;
+      animation: fadeUp 0.7s ease 0.54s both;
+    }
+    .stars {
+      display: inline-flex; gap: 2px;
+      color: var(--amber);
+      filter: drop-shadow(0 0 8px rgba(245,165,33,0.18));
+    }
+    .stars svg { width: 14px; height: 14px; }
+    .star-attr {
+      font-size: 12px; font-weight: 600; color: var(--text);
+    }
+    .star-attr span { color: var(--muted); font-weight: 500; }
+
+    /* ── Phone fan ──
+       Three CSS phones — main + 2 aux fanned behind. Each aux phone is
+       slightly smaller, rotated, and dimmed so the eye still reads the
+       main hero phone first. */
+    .phone-stack {
       position: relative;
+      display: flex; align-items: center; justify-content: center;
       animation: fadeUp 0.9s ease 0.2s both;
+      min-height: 580px;
     }
     .phone-glow {
       position: absolute;
-      width: 340px; height: 340px;
+      width: 380px; height: 380px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(245,165,33,0.16) 0%, transparent 65%);
+      background: radial-gradient(circle, rgba(245,165,33,0.18) 0%, transparent 65%);
       top: 50%; left: 50%; transform: translate(-50%,-50%);
       filter: blur(40px);
       animation: glowPulse 4s ease-in-out infinite;
       pointer-events: none;
+      z-index: 1;
     }
     @keyframes glowPulse {
       0%,100% { opacity: 0.6; transform: translate(-50%,-50%) scale(1); }
@@ -250,7 +335,6 @@
         0 0 60px rgba(245,165,33,0.08);
       transform: rotate(1.5deg);
     }
-    /* volume buttons */
     .phone::before {
       content: '';
       position: absolute;
@@ -260,7 +344,6 @@
       border-radius: 2px 0 0 2px;
       box-shadow: 0 0 0 .5px rgba(255,255,255,0.07), 0 34px 0 #252523, 0 34px 0 0 rgba(255,255,255,0.07);
     }
-    /* power button */
     .phone::after {
       content: '';
       position: absolute;
@@ -270,6 +353,39 @@
       border-radius: 0 2px 2px 0;
       box-shadow: 0 0 0 .5px rgba(255,255,255,0.07);
     }
+    .phone-main {
+      position: relative;
+      z-index: 3;
+    }
+    .phone-aux {
+      position: absolute;
+      top: 50%;
+      width: 220px;
+      opacity: 0.55;
+      filter: blur(0.4px);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .phone-aux--left  {
+      left: 0;
+      transform: translateY(-50%) rotate(-10deg);
+      animation: auxFadeL 1s ease 0.4s both;
+    }
+    .phone-aux--right {
+      right: 0;
+      transform: translateY(-50%) rotate(10deg);
+      animation: auxFadeR 1s ease 0.55s both;
+    }
+    @keyframes auxFadeL {
+      from { opacity: 0; transform: translateY(-50%) rotate(-14deg) translateX(60px); }
+      to   { opacity: 0.55; transform: translateY(-50%) rotate(-10deg); }
+    }
+    @keyframes auxFadeR {
+      from { opacity: 0; transform: translateY(-50%) rotate(14deg) translateX(-60px); }
+      to   { opacity: 0.55; transform: translateY(-50%) rotate(10deg); }
+    }
+    .phone-aux .phone-glow { display: none; }
+
     .screen {
       background: #0e100f;
       border-radius: 37px;
@@ -318,11 +434,23 @@
       border-bottom: .5px solid rgba(255,255,255,0.06);
       background: linear-gradient(180deg, rgba(245,165,33,0.09) 0%, transparent 100%);
     }
+    .scr-top.scr-top--insights {
+      background: linear-gradient(180deg, rgba(93,172,131,0.10) 0%, transparent 100%);
+    }
+    .scr-top.scr-top--coach {
+      background: linear-gradient(180deg, rgba(40,70,90,0.20) 0%, transparent 100%);
+    }
+    .scr-top.scr-top--routines {
+      background: linear-gradient(180deg, rgba(120,90,160,0.18) 0%, transparent 100%);
+    }
     .live-badge {
       display: inline-flex; align-items: center; gap: 6px;
       font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
       text-transform: uppercase; color: var(--amber);
     }
+    .live-badge.live-badge--green { color: var(--green); }
+    .live-badge.live-badge--blue  { color: #6db4e0; }
+    .live-badge.live-badge--purple { color: #a78bd0; }
     .scr-timer {
       font-size: 34px; font-weight: 700;
       letter-spacing: -0.02em;
@@ -341,7 +469,7 @@
       border-radius: 10px; padding: 8px 8px 7px;
     }
     .scr-metric span { display: block; font-size: 8px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(237,232,224,0.38); margin-bottom: 3px; }
-    .scr-metric strong { font-size: 15px; font-weight: 700; color: var(--text); }
+    .scr-metric strong { font-size: 15px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
     .scr-card {
       background: rgba(255,255,255,0.05);
       border: .5px solid rgba(255,255,255,0.08);
@@ -369,8 +497,79 @@
     }
     .scr-coach-text { font-size: 10.5px; color: rgba(237,232,224,0.72); line-height: 1.4; }
 
-    /* ── Features ── */
-    section { padding: 80px 0; }
+    /* Insights screen — bar chart + index score. Used in the aux left
+       phone in the hero, and in the screenshots gallery. */
+    .scr-insights-score {
+      display: flex; align-items: baseline; gap: 8px;
+      padding: 12px 16px 6px;
+    }
+    .scr-insights-score .num {
+      font-size: 38px; font-weight: 800; letter-spacing: -0.03em;
+      color: var(--text); line-height: 1;
+    }
+    .scr-insights-score .lbl {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.07em;
+      text-transform: uppercase; color: rgba(237,232,224,0.44);
+    }
+    .scr-insights-trend {
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-left: auto;
+      font-size: 10px; font-weight: 700; color: var(--green);
+      padding: 3px 7px; border-radius: 6px;
+      background: rgba(93,172,131,0.12);
+      border: .5px solid rgba(93,172,131,0.18);
+    }
+    .scr-bars {
+      padding: 4px 12px 12px;
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      gap: 5px; align-items: end; height: 88px;
+    }
+    .scr-bar {
+      background: linear-gradient(180deg, rgba(93,172,131,0.55), rgba(93,172,131,0.18));
+      border-radius: 3px 3px 0 0;
+      min-height: 8px;
+    }
+
+    /* Coach screen — chat bubbles. */
+    .scr-chat { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+    .scr-bubble {
+      max-width: 86%;
+      padding: 9px 11px; border-radius: 12px;
+      font-size: 11px; line-height: 1.4;
+    }
+    .scr-bubble--coach {
+      align-self: flex-start;
+      background: rgba(255,255,255,0.06);
+      color: rgba(237,232,224,0.86);
+      border: .5px solid rgba(255,255,255,0.06);
+    }
+    .scr-bubble--user {
+      align-self: flex-end;
+      background: rgba(245,165,33,0.18);
+      color: #fff;
+      border: .5px solid rgba(245,165,33,0.32);
+    }
+
+    /* Routines screen — list of routine rows. */
+    .scr-routines { padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
+    .scr-routine {
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.04);
+      border: .5px solid rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 10px 11px;
+    }
+    .scr-routine-name { font-size: 12px; font-weight: 650; color: var(--text); }
+    .scr-routine-meta { font-size: 9px; color: rgba(237,232,224,0.46); margin-top: 1px; letter-spacing: 0.02em; }
+    .scr-routine-cta {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--amber); color: #14100a;
+      display: grid; place-items: center; font-size: 10px; font-weight: 900;
+    }
+
+    /* ── Sections ── */
+    section { padding: 96px 0; }
     .sec-eyebrow {
       display: inline-flex; align-items: center; gap: 7px;
       font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
@@ -389,6 +588,7 @@
     }
     .sec-lead { color: var(--muted); font-size: 18px; line-height: 1.62; max-width: 600px; margin-bottom: 48px; }
 
+    /* ── Feature cards ── */
     .cards {
       display: grid;
       grid-template-columns: repeat(3,1fr);
@@ -400,7 +600,19 @@
       border-radius: 20px;
       padding: 26px;
       transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
     }
+    /* Top-edge shimmer that sweeps in on hover. */
+    .card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245,165,33,0.45), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+    .card:hover::before { transform: translateX(0); }
     .card:hover {
       border-color: var(--bup);
       transform: translateY(-3px);
@@ -459,8 +671,192 @@
     .watch-meta-row { font-size: 11px; color: var(--muted); }
     .watch-meta-row strong { color: var(--text); font-weight: 600; margin-right: 4px; }
 
+    /* ── Screenshots gallery ── */
+    .gallery-shell { position: relative; }
+    .gallery-track {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(220px, 240px);
+      gap: 22px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding: 0 22px;
+      padding: 12px 4px 28px;
+      margin: 0 -4px;
+      scrollbar-width: none;
+    }
+    .gallery-track::-webkit-scrollbar { display: none; }
+    .gallery-slide {
+      scroll-snap-align: start;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+    }
+    .gallery-slide .phone {
+      width: 240px; transform: rotate(0);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.10),
+        0 0 0 2px rgba(0,0,0,0.85),
+        inset 0 0 0 1px rgba(255,255,255,0.04),
+        0 32px 80px rgba(0,0,0,0.55);
+    }
+    .gallery-slide .phone::before,
+    .gallery-slide .phone::after { display: none; }
+    .gallery-caption {
+      display: flex; flex-direction: column; gap: 4px; text-align: center;
+      max-width: 240px;
+    }
+    .gallery-caption strong {
+      font-size: 13px; font-weight: 700; color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .gallery-caption span {
+      font-size: 12px; color: var(--muted); line-height: 1.45;
+    }
+    .gallery-nav {
+      position: absolute; top: 12px; right: 0;
+      display: flex; gap: 8px;
+    }
+    .gallery-btn {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: var(--s2); border: 1px solid var(--border);
+      color: var(--text); cursor: pointer;
+      display: grid; place-items: center;
+      transition: all 0.18s ease;
+    }
+    .gallery-btn:hover { background: var(--s3); border-color: var(--bup); }
+    .gallery-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .gallery-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+    @media (max-width: 600px) {
+      .gallery-nav { display: none; }
+    }
+
+    /* ── Voice / social proof ── */
+    .voice-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .voice-card {
+      background: var(--s1);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 26px;
+      display: flex; flex-direction: column; gap: 16px;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .voice-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245,165,33,0.45), transparent);
+      transform: translateX(-100%); transition: transform 0.6s ease;
+    }
+    .voice-card:hover::before { transform: translateX(0); }
+    .voice-card:hover {
+      border-color: var(--bup);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .voice-quote {
+      font-size: 16px; line-height: 1.5;
+      color: var(--text); font-weight: 500;
+      letter-spacing: -0.005em;
+    }
+    .voice-quote em {
+      font-family: 'Instrument Serif', serif; font-style: italic;
+      color: var(--amber); font-weight: 400;
+    }
+    .voice-attribution {
+      display: flex; align-items: center; gap: 10px;
+      margin-top: auto;
+    }
+    .voice-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: linear-gradient(145deg, #1c1c18, #2e2514);
+      border: 1px solid rgba(245,165,33,0.22);
+      color: var(--amber);
+      display: grid; place-items: center;
+      font-weight: 800; font-size: 13px;
+      flex-shrink: 0;
+    }
+    .voice-avatar.voice-avatar--green {
+      background: linear-gradient(145deg, #142019, #1f3a2e);
+      border-color: rgba(93,172,131,0.25); color: var(--green);
+    }
+    .voice-avatar.voice-avatar--neutral {
+      background: linear-gradient(145deg, #1a1d1b, #242824);
+      border-color: var(--bup); color: var(--text);
+    }
+    .voice-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .voice-role { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+
+    .voice-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      padding: 14px 0 4px;
+      border-top: 1px solid var(--border);
+      margin-top: 4px;
+    }
+    .voice-stat {
+      display: flex; flex-direction: column; gap: 2px;
+      align-items: flex-start;
+    }
+    .voice-stat .num {
+      font-size: 22px; font-weight: 800; letter-spacing: -0.02em;
+      color: var(--text); font-variant-numeric: tabular-nums;
+    }
+    .voice-stat .lbl {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ── FAQ ── */
+    .faq-list {
+      display: flex; flex-direction: column; gap: 10px;
+      max-width: 820px;
+    }
+    .faq-item {
+      background: var(--s1); border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+    .faq-item[open] {
+      border-color: rgba(245,165,33,0.22);
+      background: linear-gradient(160deg, var(--s1), rgba(245,165,33,0.03));
+    }
+    .faq-q {
+      list-style: none;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+      padding: 18px 22px;
+      font-size: 16px; font-weight: 650;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .faq-q::-webkit-details-marker { display: none; }
+    .faq-chev {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--s2); border: 1px solid var(--border);
+      display: grid; place-items: center;
+      transition: transform 0.25s ease, background 0.2s ease, border-color 0.2s ease;
+      flex-shrink: 0;
+    }
+    .faq-chev svg { width: 12px; height: 12px; stroke: var(--text); fill: none; stroke-width: 2; }
+    .faq-item[open] .faq-chev {
+      transform: rotate(45deg);
+      background: var(--amber);
+      border-color: var(--amber);
+    }
+    .faq-item[open] .faq-chev svg { stroke: #14100a; }
+    .faq-a {
+      padding: 0 22px 20px;
+      color: var(--muted);
+      font-size: 14.5px; line-height: 1.6;
+    }
+    .faq-a a { color: var(--amber); border-bottom: 1px solid rgba(245,165,33,0.3); }
+    .faq-a a:hover { border-bottom-color: var(--amber); }
+
     /* ── Privacy band ── */
-    .band-section { padding: 0 0 80px; }
+    .band-section { padding: 0 0 96px; }
     .band {
       background: linear-gradient(135deg, var(--forest) 0%, var(--forest2) 100%);
       border: 1px solid rgba(93,172,131,0.12);
@@ -497,6 +893,27 @@
     }
     .btn-band:hover { background: rgba(93,172,131,0.25); border-color: rgba(93,172,131,0.4); }
 
+    /* ── Last call ── */
+    .last-call {
+      text-align: center;
+      padding: 56px 0 96px;
+    }
+    .last-call h2 {
+      font-size: clamp(48px, 7vw, 80px);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 22px;
+    }
+    .last-call p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 18px;
+      max-width: 360px;
+      margin-left: auto; margin-right: auto;
+      line-height: 1.5;
+    }
+    .last-call .app-store-badge { animation: fadeUp 0.7s ease 0.05s both; }
+
     /* ── Footer ── */
     footer {
       border-top: 1px solid var(--border);
@@ -529,19 +946,37 @@
     /* ── Divider ── */
     .divider { height: 1px; background: var(--border); margin: 0; }
 
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .orb, .orb-cursor, .phone-glow { animation: none !important; }
+      .orb-cursor { display: none; }
+      .reveal { opacity: 1; transform: none; }
+      html { scroll-behavior: auto; }
+    }
+
     /* ── Responsive ── */
     @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; min-height: auto; padding: 44px 0 52px; }
-      .phone-wrap { order: -1; }
+      section { padding: 72px 0; }
+      .hero { grid-template-columns: 1fr; min-height: auto; padding: 44px 0 52px; gap: 24px; }
+      .phone-stack { order: -1; min-height: 480px; }
+      .phone-aux { display: none; }
       .phone { width: min(240px, 80vw); }
-      .cards { grid-template-columns: 1fr; }
+      .cards, .voice-cards { grid-template-columns: 1fr; }
       .band { grid-template-columns: 1fr; padding: 30px 24px; }
       .nav-links { display: none; }
     }
     @media (max-width: 600px) {
       h1 { font-size: 44px; }
-      .cta-row { flex-direction: column; align-items: flex-start; }
-      .btn { width: 100%; justify-content: center; }
+      .cta-row { flex-direction: column; align-items: stretch; }
+      .btn, .app-store-badge { width: 100%; justify-content: center; }
+      .last-call h2 { font-size: 44px; }
+      .faq-q { padding: 16px 18px; font-size: 15px; }
+      .faq-a { padding: 0 18px 18px; }
     }
   </style>
 </head>
@@ -550,6 +985,7 @@
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
+    <div class="orb orb-cursor" id="orbCursor"></div>
   </div>
 
   <header>
@@ -560,10 +996,11 @@
       </a>
       <div class="nav-links">
         <a href="#features">Features</a>
-        <a href="#privacy">Privacy</a>
-        <a href="/privacy/">Privacy Policy</a>
+        <a href="#screens">Screens</a>
+        <a href="#faq">FAQ</a>
+        <a href="/privacy/">Privacy</a>
         <a href="/terms/">Terms</a>
-        <a class="nav-cta" href="mailto:support@repwiser.fit">Contact</a>
+        <a class="nav-cta" href="https://apps.apple.com/app/repwiser/id6744890930" target="_blank" rel="noopener">Get the app</a>
       </div>
     </nav>
   </header>
@@ -575,16 +1012,117 @@
         <div class="eyebrow"><span class="pulse-dot"></span>iPhone + Apple Watch</div>
         <h1>Train with a<br><em>sharper plan.</em></h1>
         <p class="lead">RepWiser helps you plan workouts, log sets without friction, track PRs, understand recovery, and keep your next session moving from iPhone to Apple Watch.</p>
+
         <div class="cta-row">
-          <a class="btn btn-primary" href="mailto:support@repwiser.fit">Contact Support</a>
-          <a class="btn btn-secondary" href="/privacy/">Read Privacy Policy</a>
+          <a class="app-store-badge" id="ctaPrimary" href="https://apps.apple.com/app/repwiser/id6744890930" target="_blank" rel="noopener" aria-label="Download on the App Store">
+            <svg class="apple-glyph" viewBox="0 0 384 512" aria-hidden="true">
+              <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+            </svg>
+            <span class="badge-lines">
+              <span class="badge-pre">Download on the</span>
+              <span class="badge-name">App Store</span>
+            </span>
+          </a>
+          <a class="btn btn-secondary" href="#features">See features</a>
         </div>
-        <p class="hero-sub">Also available for <a href="/privacy/">Apple Watch</a> · <a href="/terms/">Terms of Use</a></p>
+
+        <div class="trust-line">
+          <span>Privacy-first</span>
+          <span class="trust-dot"></span>
+          <span>Apple Watch + iPhone</span>
+          <span class="trust-dot"></span>
+          <span>No ads, no data sales</span>
+        </div>
+
+        <!-- Star row. Until App Store reviews accrue, this is the indie-dev
+             signal. Swap to "★ 4.x · N ratings" when the App Store has 5+
+             reviews; see comment in `Beta-feedback card` for the real-quote
+             swap as well. -->
+        <div class="star-row">
+          <span class="stars" aria-hidden="true">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 6 6.4.5-4.9 4.2 1.5 6.3L10 14.8l-5.6 3.2L5.9 11.7 1 7.5l6.4-.5L10 1z"/></svg>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 6 6.4.5-4.9 4.2 1.5 6.3L10 14.8l-5.6 3.2L5.9 11.7 1 7.5l6.4-.5L10 1z"/></svg>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 6 6.4.5-4.9 4.2 1.5 6.3L10 14.8l-5.6 3.2L5.9 11.7 1 7.5l6.4-.5L10 1z"/></svg>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 6 6.4.5-4.9 4.2 1.5 6.3L10 14.8l-5.6 3.2L5.9 11.7 1 7.5l6.4-.5L10 1z"/></svg>
+            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 6 6.4.5-4.9 4.2 1.5 6.3L10 14.8l-5.6 3.2L5.9 11.7 1 7.5l6.4-.5L10 1z"/></svg>
+          </span>
+          <span class="star-attr">Built by a lifter <span>· Indie, no investors</span></span>
+        </div>
       </div>
 
-      <div class="phone-wrap" aria-label="RepWiser app preview">
+      <div class="phone-stack" aria-label="RepWiser app preview">
+        <!-- Aux phone (left, behind): Insights screen -->
+        <div class="phone phone-aux phone-aux--left" aria-hidden="true">
+          <div class="screen">
+            <div class="di"></div>
+            <div class="status-bar"><span>9:41</span></div>
+            <div class="screen-content">
+              <div class="scr-top scr-top--insights">
+                <div class="live-badge live-badge--green"><span class="pulse-dot" style="width:5px;height:5px;background:var(--green);"></span>Strength Index</div>
+                <div class="scr-insights-score">
+                  <span class="num">84</span>
+                  <span class="lbl">SCORE</span>
+                  <span class="scr-insights-trend">↑ 6</span>
+                </div>
+              </div>
+              <div class="scr-bars">
+                <div class="scr-bar" style="height:32%"></div>
+                <div class="scr-bar" style="height:48%"></div>
+                <div class="scr-bar" style="height:38%"></div>
+                <div class="scr-bar" style="height:64%"></div>
+                <div class="scr-bar" style="height:54%"></div>
+                <div class="scr-bar" style="height:78%"></div>
+                <div class="scr-bar" style="height:88%"></div>
+              </div>
+              <div class="scr-card">
+                <div class="scr-card-lbl">This week</div>
+                <div class="scr-card-title">11.4k kg · 4 sessions</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aux phone (right, behind): Routines screen -->
+        <div class="phone phone-aux phone-aux--right" aria-hidden="true">
+          <div class="screen">
+            <div class="di"></div>
+            <div class="status-bar"><span>9:41</span></div>
+            <div class="screen-content">
+              <div class="scr-top scr-top--routines">
+                <div class="live-badge live-badge--purple">Routines</div>
+                <div class="scr-card-title" style="margin-top:6px;">My Plans</div>
+              </div>
+              <div class="scr-routines">
+                <div class="scr-routine">
+                  <div>
+                    <div class="scr-routine-name">Push · Strength</div>
+                    <div class="scr-routine-meta">5 lifts · 50 min</div>
+                  </div>
+                  <div class="scr-routine-cta">▶</div>
+                </div>
+                <div class="scr-routine">
+                  <div>
+                    <div class="scr-routine-name">Pull Day</div>
+                    <div class="scr-routine-meta">6 lifts · 55 min</div>
+                  </div>
+                  <div class="scr-routine-cta">▶</div>
+                </div>
+                <div class="scr-routine">
+                  <div>
+                    <div class="scr-routine-name">Legs · Heavy</div>
+                    <div class="scr-routine-meta">7 lifts · 65 min</div>
+                  </div>
+                  <div class="scr-routine-cta">▶</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="phone-glow" aria-hidden="true"></div>
-        <div class="phone">
+
+        <!-- Main phone: Active workout (the existing scaffolding). -->
+        <div class="phone phone-main">
           <div class="screen">
             <div class="di" aria-hidden="true"></div>
             <div class="status-bar">
@@ -681,6 +1219,273 @@
       </div>
     </section>
 
+    <!-- Screenshots gallery -->
+    <section id="screens" class="wrap reveal">
+      <div class="sec-eyebrow"><span class="sec-rule"></span>Inside the app</div>
+      <h2>Every surface, sharper than <em>last week.</em></h2>
+      <p class="sec-lead">Four core screens, each focused on doing one thing well. No clutter, no upsells.</p>
+
+      <div class="gallery-shell">
+        <div class="gallery-nav" aria-hidden="true">
+          <button class="gallery-btn" id="galPrev" aria-label="Previous screen">
+            <svg viewBox="0 0 24 24"><polyline points="15 6 9 12 15 18"/></svg>
+          </button>
+          <button class="gallery-btn" id="galNext" aria-label="Next screen">
+            <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+          </button>
+        </div>
+
+        <div class="gallery-track" id="galTrack">
+          <!-- Slide 1 — Active workout -->
+          <div class="gallery-slide">
+            <div class="phone">
+              <div class="screen">
+                <div class="di"></div>
+                <div class="status-bar"><span>9:41</span></div>
+                <div class="screen-content">
+                  <div class="scr-top">
+                    <div class="live-badge"><span class="pulse-dot" style="width:5px;height:5px;"></span>Live · Push</div>
+                    <div class="scr-timer">42:18</div>
+                    <div class="scr-timer-label">Duration</div>
+                  </div>
+                  <div class="scr-metrics">
+                    <div class="scr-metric"><span>Sets</span><strong>14</strong></div>
+                    <div class="scr-metric"><span>Volume</span><strong>8.7k</strong></div>
+                    <div class="scr-metric"><span>PRs</span><strong>2 ✦</strong></div>
+                  </div>
+                  <div class="scr-card">
+                    <div class="scr-card-lbl">Current lift</div>
+                    <div class="scr-card-title">Incline DB Press</div>
+                    <div class="scr-set-row">
+                      <div class="scr-pill">32.5 kg</div>
+                      <div class="scr-pill">8 reps</div>
+                      <div class="scr-check">✓</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="gallery-caption">
+              <strong>Active workout</strong>
+              <span>Plate calc, RPE, rest timer, and warm-ups in one focused flow.</span>
+            </div>
+          </div>
+
+          <!-- Slide 2 — Insights -->
+          <div class="gallery-slide">
+            <div class="phone">
+              <div class="screen">
+                <div class="di"></div>
+                <div class="status-bar"><span>9:41</span></div>
+                <div class="screen-content">
+                  <div class="scr-top scr-top--insights">
+                    <div class="live-badge live-badge--green"><span class="pulse-dot" style="width:5px;height:5px;background:var(--green);"></span>Strength Index</div>
+                    <div class="scr-insights-score">
+                      <span class="num">84</span>
+                      <span class="lbl">SCORE</span>
+                      <span class="scr-insights-trend">↑ 6</span>
+                    </div>
+                  </div>
+                  <div class="scr-bars">
+                    <div class="scr-bar" style="height:32%"></div>
+                    <div class="scr-bar" style="height:48%"></div>
+                    <div class="scr-bar" style="height:38%"></div>
+                    <div class="scr-bar" style="height:64%"></div>
+                    <div class="scr-bar" style="height:54%"></div>
+                    <div class="scr-bar" style="height:78%"></div>
+                    <div class="scr-bar" style="height:88%"></div>
+                  </div>
+                  <div class="scr-card">
+                    <div class="scr-card-lbl">This week</div>
+                    <div class="scr-card-title">11.4k kg · 4 sessions</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="gallery-caption">
+              <strong>Insights</strong>
+              <span>Strength index, plateaus, muscle balance — pulled from your real history.</span>
+            </div>
+          </div>
+
+          <!-- Slide 3 — Coach -->
+          <div class="gallery-slide">
+            <div class="phone">
+              <div class="screen">
+                <div class="di"></div>
+                <div class="status-bar"><span>9:41</span></div>
+                <div class="screen-content">
+                  <div class="scr-top scr-top--coach">
+                    <div class="live-badge live-badge--blue">AI Coach</div>
+                    <div class="scr-card-title" style="margin-top:6px;">Today's session</div>
+                  </div>
+                  <div class="scr-chat">
+                    <div class="scr-bubble scr-bubble--coach">Recovery looks good — HRV up 8% week-on-week. Push your top set today.</div>
+                    <div class="scr-bubble scr-bubble--user">What's a smart top set?</div>
+                    <div class="scr-bubble scr-bubble--coach">Try 5 × 90 kg @ RPE 8. Stop if bar speed drops.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="gallery-caption">
+              <strong>Coach</strong>
+              <span>Practical, training-aware advice. Nothing generic, nothing pushy.</span>
+            </div>
+          </div>
+
+          <!-- Slide 4 — Routines -->
+          <div class="gallery-slide">
+            <div class="phone">
+              <div class="screen">
+                <div class="di"></div>
+                <div class="status-bar"><span>9:41</span></div>
+                <div class="screen-content">
+                  <div class="scr-top scr-top--routines">
+                    <div class="live-badge live-badge--purple">Routines</div>
+                    <div class="scr-card-title" style="margin-top:6px;">My Plans</div>
+                  </div>
+                  <div class="scr-routines">
+                    <div class="scr-routine">
+                      <div>
+                        <div class="scr-routine-name">Push · Strength</div>
+                        <div class="scr-routine-meta">5 lifts · 50 min</div>
+                      </div>
+                      <div class="scr-routine-cta">▶</div>
+                    </div>
+                    <div class="scr-routine">
+                      <div>
+                        <div class="scr-routine-name">Pull Day</div>
+                        <div class="scr-routine-meta">6 lifts · 55 min</div>
+                      </div>
+                      <div class="scr-routine-cta">▶</div>
+                    </div>
+                    <div class="scr-routine">
+                      <div>
+                        <div class="scr-routine-name">Legs · Heavy</div>
+                        <div class="scr-routine-meta">7 lifts · 65 min</div>
+                      </div>
+                      <div class="scr-routine-cta">▶</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="gallery-caption">
+              <strong>Routines</strong>
+              <span>Plan once, adapt during the session. Templates stay clean.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Voice / social proof -->
+    <section id="voice" class="wrap reveal">
+      <div class="sec-eyebrow"><span class="sec-rule"></span>From the lab</div>
+      <h2>Built by someone <br>who <em>lifts.</em></h2>
+      <p class="sec-lead">RepWiser is an indie product. No investors, no growth hacks, no ad SDK. The whole thing exists because logging shouldn't break the flow of training.</p>
+
+      <div class="voice-cards">
+        <article class="voice-card reveal">
+          <p class="voice-quote">I built RepWiser because logging shouldn't break the flow of training. Every screen had to earn its place.</p>
+          <div class="voice-attribution">
+            <div class="voice-avatar" aria-hidden="true">B</div>
+            <div>
+              <div class="voice-name">Biswajit</div>
+              <div class="voice-role">Solo developer · iOS / SwiftUI</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="voice-card reveal reveal-2">
+          <p class="voice-quote">Your data <em>stays focused on training.</em> No third-party SDK, no ad pixels, sync is opt-in.</p>
+          <div class="voice-stats">
+            <div class="voice-stat"><span class="num">0</span><span class="lbl">Ad SDKs</span></div>
+            <div class="voice-stat"><span class="num">0</span><span class="lbl">Trackers</span></div>
+            <div class="voice-stat"><span class="num">100%</span><span class="lbl">Private</span></div>
+          </div>
+          <div class="voice-attribution">
+            <div class="voice-avatar voice-avatar--green" aria-hidden="true">P</div>
+            <div>
+              <div class="voice-name">Privacy by default</div>
+              <div class="voice-role"><a href="/privacy/" style="color:var(--muted);">Read the policy →</a></div>
+            </div>
+          </div>
+        </article>
+
+        <!-- TODO: Replace with a real App Store review when one accrues.
+             Keep the structure (single sentence + attribution) so the
+             voice block stays balanced. -->
+        <article class="voice-card reveal reveal-3">
+          <p class="voice-quote">"It's the first logger that doesn't make me drop my pace."</p>
+          <div class="voice-attribution">
+            <div class="voice-avatar voice-avatar--neutral" aria-hidden="true">★</div>
+            <div>
+              <div class="voice-name">Beta tester</div>
+              <div class="voice-role">TestFlight build · Apr 2026</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="wrap reveal">
+      <div class="sec-eyebrow"><span class="sec-rule"></span>Common questions</div>
+      <h2>Things lifters ask<br>before <em>installing.</em></h2>
+      <p class="sec-lead">Short answers, mirrored from the privacy policy. If something's missing, mail <a href="mailto:support@repwiser.fit" style="color:var(--amber);">support@repwiser.fit</a>.</p>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>Is RepWiser free?</span>
+            <span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </summary>
+          <div class="faq-a">RepWiser is free to download and use for core workout logging, planning, and history. Some advanced features are available via in-app purchase; you'll see them clearly inside the app. There are no ads.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>Do I need an Apple Watch?</span>
+            <span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </summary>
+          <div class="faq-a">No. RepWiser is fully usable on iPhone alone. The Apple Watch companion adds wrist-side controls during a session (rest timer, set complete, focused exercise) but is entirely optional.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>Does it work offline?</span>
+            <span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </summary>
+          <div class="faq-a">Yes. Workouts, routines, and history live on-device. Cloud sync is opt-in — turn it on if you want to back up or move to a new phone, otherwise nothing leaves your iPhone.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>What does it read from Apple Health?</span>
+            <span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </summary>
+          <div class="faq-a">Only what you grant. Sleep, resting heart rate, HRV, and recent activity are read to show readiness signals. RepWiser can also save your completed workouts back to Apple Health when you enable HealthKit writes.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>Can I export my workout history?</span>
+            <span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </summary>
+          <div class="faq-a">Yes. Settings has an export option that produces a portable file of your full history. Apple Health writes also keep a parallel copy in the system Health database.</div>
+        </details>
+
+        <details class="faq-item">
+          <summary class="faq-q">
+            <span>How is my data stored?</span>
+            <span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
+          </summary>
+          <div class="faq-a">Locally on your device by default. Cloud sync (when enabled) goes to a private RepWiser-managed Supabase project. No third-party trackers, no ad networks. Full details are in the <a href="/privacy/">privacy policy</a>.</div>
+        </details>
+      </div>
+    </section>
+
     <!-- Privacy band -->
     <section id="privacy" class="band-section wrap reveal">
       <div class="band">
@@ -690,6 +1495,21 @@
         </div>
         <a class="btn-band" href="/privacy/">View Privacy Policy →</a>
       </div>
+    </section>
+
+    <!-- Last call CTA -->
+    <section class="last-call wrap reveal">
+      <h2>Train <em>sharper.</em></h2>
+      <a class="app-store-badge" href="https://apps.apple.com/app/repwiser/id6744890930" target="_blank" rel="noopener" aria-label="Download on the App Store">
+        <svg class="apple-glyph" viewBox="0 0 384 512" aria-hidden="true">
+          <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
+        </svg>
+        <span class="badge-lines">
+          <span class="badge-pre">Download on the</span>
+          <span class="badge-name">App Store</span>
+        </span>
+      </a>
+      <p>Or open <strong style="color:var(--text);">repwiser.fit</strong> on your iPhone to install.</p>
     </section>
   </main>
 
@@ -730,6 +1550,64 @@
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // ── Motion enhancements (gated to viewport >= 900px and no
+    //    prefers-reduced-motion). Keep cheap on phones; the static
+    //    fallback already looks complete without them. ──
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const wideViewport  = window.matchMedia('(min-width: 900px)').matches;
+
+    if (!reducedMotion && wideViewport) {
+      // Cursor-tracked spotlight orb. The existing .orb-cursor element is
+      // hidden until JS activates it, so users on no-JS or reduced-motion
+      // never see a misplaced halo.
+      const orb = document.getElementById('orbCursor');
+      if (orb) {
+        orb.classList.add('is-active');
+        let pendingX = 0, pendingY = 0, ticking = false;
+        function update() {
+          orb.style.transform = `translate3d(${pendingX - 240}px, ${pendingY - 240}px, 0)`;
+          ticking = false;
+        }
+        window.addEventListener('mousemove', (e) => {
+          pendingX = e.clientX; pendingY = e.clientY;
+          if (!ticking) { requestAnimationFrame(update); ticking = true; }
+        }, { passive: true });
+      }
+
+      // Magnetic primary CTA — translates 4-6px toward the cursor when
+      // within ~80px. Restrained on purpose; bigger pulls feel gimmicky.
+      const cta = document.getElementById('ctaPrimary');
+      if (cta) {
+        cta.addEventListener('mousemove', (e) => {
+          const rect = cta.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top  + rect.height / 2;
+          const dx = (e.clientX - cx) / rect.width;
+          const dy = (e.clientY - cy) / rect.height;
+          cta.style.transform = `translate(${dx * 6}px, ${dy * 4}px)`;
+        });
+        cta.addEventListener('mouseleave', () => {
+          cta.style.transform = '';
+        });
+      }
+    }
+
+    // ── Screenshots gallery prev / next ──
+    (function () {
+      const track = document.getElementById('galTrack');
+      const prev  = document.getElementById('galPrev');
+      const next  = document.getElementById('galNext');
+      if (!track || !prev || !next) return;
+      function step(direction) {
+        const slide = track.querySelector('.gallery-slide');
+        if (!slide) return;
+        const width = slide.getBoundingClientRect().width + 22; /* gap */
+        track.scrollBy({ left: direction * width, behavior: 'smooth' });
+      }
+      prev.addEventListener('click', () => step(-1));
+      next.addEventListener('click', () => step(1));
+    })();
   </script>
 </body>
 </html>
