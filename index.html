@@ -3,1524 +3,2224 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RepWiser — Train with a sharper plan</title>
+  <title>RepWiser - Workout tracker for sharper training</title>
   <meta name="description" content="RepWiser is an iPhone and Apple Watch workout coach for planning sessions, logging sets, tracking PRs, and understanding recovery.">
-  <meta name="theme-color" content="#0b0d0c">
+  <meta name="theme-color" content="#080a09">
 
-  <!-- Open Graph (the landing page is the default unfurl target for any
-       repwiser.fit/* link that isn't a profile share). -->
-  <meta property="og:title" content="RepWiser — Train with a sharper plan">
-  <meta property="og:description" content="A coach-first workout app for iPhone and Apple Watch. Plan sessions, log sets without friction, track PRs, understand recovery.">
+  <meta property="og:title" content="RepWiser - Workout tracker for sharper training">
+  <meta property="og:description" content="Plan workouts, log sets without friction, track PRs, understand recovery, and train from iPhone to Apple Watch.">
   <meta property="og:url" content="https://repwiser.fit/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="RepWiser">
   <meta property="og:image" content="https://repwiser.fit/og/share-default.svg">
   <meta name="twitter:card" content="summary_large_image">
 
+  <link rel="canonical" href="https://repwiser.fit/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23080a09'/%3E%3Crect x='10' y='10' width='44' height='44' rx='14' fill='%23111614' stroke='%23ffb322' stroke-width='2'/%3E%3Cpath d='M24 43V21h10c5 0 9 3 9 8 0 3-2 6-5 7l6 7h-8l-5-6h-1v6h-6Zm6-12h4c2 0 3-1 3-3s-1-3-3-3h-4v6Z' fill='%23ffb322'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg:        #0b0d0c;
-      --s1:        #131614;
-      --s2:        #1a1e1b;
-      --s3:        #222720;
-      --border:    rgba(255,255,255,0.07);
-      --bup:       rgba(255,255,255,0.13);
-      --text:      #ede8e0;
-      --muted:     rgba(237,232,224,0.48);
-      --muted2:    rgba(237,232,224,0.28);
-      --amber:     #f5a521;
-      --amber-h:   #f8b93d;
-      --amber-glo: rgba(245,165,33,0.14);
-      --amber-dk:  rgba(245,165,33,0.08);
-      --forest:    #182a22;
-      --forest2:   #1f3a2e;
-      --green:     #5dac83;
-      font-family: 'Outfit', sans-serif;
-      font-feature-settings: "ss01", "cv11";
-      color-scheme: dark;
+      --ink: #080a09;
+      --ink-2: #111614;
+      --ink-3: #18201d;
+      --paper: #ffffff;
+      --paper-2: #f5f7f4;
+      --paper-3: #eef3ef;
+      --line: rgba(8, 10, 9, 0.1);
+      --line-dark: rgba(255, 255, 255, 0.12);
+      --text: #0e1512;
+      --text-soft: rgba(14, 21, 18, 0.66);
+      --text-faint: rgba(14, 21, 18, 0.44);
+      --text-invert: #f6fbf8;
+      --text-invert-soft: rgba(246, 251, 248, 0.68);
+      --amber: #ffb322;
+      --amber-2: #ffd45f;
+      --mint: #32d583;
+      --blue: #74a8ff;
+      --coral: #ff7a66;
+      --radius: 18px;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.18);
+      --font-ui: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-display: "Instrument Serif", Georgia, serif;
+      color-scheme: light dark;
+      font-family: var(--font-ui);
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    * {
+      margin: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--ink);
+    }
 
     body {
-      background: var(--bg);
-      color: var(--text);
       min-height: 100dvh;
+      background: var(--ink);
+      color: var(--text);
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
-    /* ── Grain overlay ── */
-    body::after {
-      content: '';
+    body::before {
+      content: "";
       position: fixed;
       inset: 0;
-      background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='1'/></svg>");
-      opacity: 0.032;
+      z-index: -2;
       pointer-events: none;
-      z-index: 9999;
+      background:
+        linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        var(--ink);
+      background-size: 58px 58px;
+      mask-image: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0.72) 48%, transparent 100%);
     }
 
-    /* ── Ambient orbs ── */
-    .orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-    .orb {
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+      opacity: 0.035;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    summary {
+      font: inherit;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 44px));
+      margin: 0 auto;
+    }
+
+    .skip-link {
       position: absolute;
-      border-radius: 50%;
-      filter: blur(90px);
-    }
-    .orb-1 {
-      width: 700px; height: 700px;
-      background: radial-gradient(circle, rgba(245,165,33,0.11) 0%, transparent 65%);
-      top: -220px; right: -180px;
-      animation: drift1 14s ease-in-out infinite;
-    }
-    .orb-2 {
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(30,55,40,0.85) 0%, transparent 70%);
-      bottom: 30%; left: -160px;
-      animation: drift2 18s ease-in-out infinite alternate;
-    }
-    .orb-3 {
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(40,70,90,0.35) 0%, transparent 70%);
-      bottom: -100px; right: 20%;
-      animation: drift1 20s ease-in-out infinite reverse;
-    }
-    /* Cursor-tracked spotlight orb. JS toggles the
-       `is-active` class on viewports >= 900px when reduced-motion is
-       not requested; otherwise the rule never matches and the orb
-       stays invisible. */
-    .orb-cursor {
-      width: 480px; height: 480px;
-      background: radial-gradient(circle, rgba(245,165,33,0.10) 0%, transparent 60%);
-      transform: translate3d(-1000px, -1000px, 0);
-      transition: transform 240ms cubic-bezier(0.22, 1, 0.36, 1), opacity 400ms ease;
-      opacity: 0;
-    }
-    .orb-cursor.is-active { opacity: 1; }
-    @keyframes drift1 {
-      0%,100% { transform: translate(0,0) scale(1); }
-      50% { transform: translate(-60px,50px) scale(1.08); }
-    }
-    @keyframes drift2 {
-      0% { transform: translate(0,0); }
-      100% { transform: translate(50px,-70px); }
+      left: 16px;
+      top: -48px;
+      z-index: 200;
+      background: var(--paper);
+      color: var(--ink);
+      padding: 10px 14px;
+      border-radius: 10px;
+      transition: top 0.16s ease;
     }
 
-    /* ── Layout ── */
-    a { color: inherit; text-decoration: none; }
-    .wrap { width: min(1160px, calc(100% - 44px)); margin: 0 auto; position: relative; z-index: 1; }
+    .skip-link:focus {
+      top: 16px;
+    }
 
-    /* ── Header ── */
-    header {
-      position: sticky; top: 0; z-index: 50;
-      border-bottom: 1px solid var(--border);
-      background: rgba(11,13,12,0.75);
-      backdrop-filter: blur(22px) saturate(180%);
-      -webkit-backdrop-filter: blur(22px) saturate(180%);
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 10, 9, 0.78);
+      backdrop-filter: blur(22px) saturate(160%);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
     }
-    nav {
-      min-height: 68px;
-      display: flex; align-items: center; justify-content: space-between; gap: 20px;
-    }
-    .brand {
-      display: flex; align-items: center; gap: 11px;
-      font-size: 17px; font-weight: 700; letter-spacing: -0.02em;
-      color: var(--text);
-    }
-    .mark {
-      width: 34px; height: 34px; border-radius: 10px;
-      display: grid; place-items: center;
-      background: linear-gradient(145deg, #1c1c18, #2e2514);
-      border: 1px solid rgba(245,165,33,0.22);
-      color: var(--amber);
-      font-weight: 800; font-size: 15px;
-      box-shadow: 0 0 0 3px rgba(245,165,33,0.06), inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-    .nav-links {
-      display: flex; align-items: center; gap: 4px;
-      font-size: 14px; font-weight: 500; color: var(--muted);
-    }
-    .nav-links a {
-      padding: 7px 12px; border-radius: 9px;
-      transition: background 0.15s, color 0.15s;
-    }
-    .nav-links a:hover { background: var(--s2); color: var(--text); }
-    .nav-cta {
-      background: var(--amber); color: #100e07 !important;
-      font-weight: 700 !important; padding: 8px 16px !important;
-      border-radius: 10px !important;
-      box-shadow: 0 4px 18px rgba(245,165,33,0.26);
-      transition: all 0.18s ease !important;
-    }
-    .nav-cta:hover { background: var(--amber-h) !important; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(245,165,33,0.34) !important; }
 
-    /* ── Hero ── */
-    .hero {
-      min-height: calc(100svh - 68px);
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
+    .nav {
+      min-height: 72px;
+      display: flex;
       align-items: center;
-      gap: 48px;
-      padding: 60px 0 80px;
+      justify-content: space-between;
+      gap: 20px;
     }
-    .hero-text { position: relative; }
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--amber-dk); border: 1px solid rgba(245,165,33,0.2);
-      color: rgba(245,185,80,0.9);
-      padding: 7px 12px; border-radius: 999px;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-      margin-bottom: 28px;
-      animation: fadeUp 0.6s ease 0.1s both;
-    }
-    .pulse-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--amber);
-      box-shadow: 0 0 0 0 rgba(245,165,33,0.4);
-      animation: pulse 2s ease-in-out infinite;
-      flex-shrink: 0;
-    }
-    @keyframes pulse {
-      0%,100% { box-shadow: 0 0 0 0 rgba(245,165,33,0.5); }
-      50% { box-shadow: 0 0 0 5px rgba(245,165,33,0); }
-    }
-    h1 {
-      font-size: clamp(50px, 8vw, 92px);
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      color: var(--text-invert);
       font-weight: 800;
-      line-height: 0.94;
-      letter-spacing: -0.04em;
-      color: var(--text);
-      margin-bottom: 22px;
-      animation: fadeUp 0.7s ease 0.18s both;
+      letter-spacing: -0.03em;
     }
-    h1 em {
-      font-family: 'Instrument Serif', serif;
-      font-style: italic;
-      font-weight: 400;
+
+    .mark {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 11px;
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0)),
+        linear-gradient(145deg, #2a2112, #111614);
+      border: 1px solid rgba(255, 179, 34, 0.4);
       color: var(--amber);
-      letter-spacing: -0.02em;
-    }
-    .lead {
-      color: var(--muted);
-      font-size: clamp(16px, 2vw, 19px);
-      line-height: 1.65;
-      max-width: 520px;
-      margin-bottom: 30px;
-      animation: fadeUp 0.7s ease 0.28s both;
-    }
-    .cta-row {
-      display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
-      animation: fadeUp 0.7s ease 0.38s both;
-    }
-    .btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 13px 24px; border-radius: 13px;
-      font-size: 14.5px; font-weight: 650;
-      text-decoration: none; transition: all 0.18s ease; cursor: pointer;
-      border: none;
-      font-family: inherit;
-    }
-    .btn-primary {
-      background: var(--amber); color: #14100a;
-      box-shadow: 0 8px 28px rgba(245,165,33,0.3), 0 0 0 1px rgba(245,165,33,0.2);
-    }
-    .btn-primary:hover { background: var(--amber-h); transform: translateY(-1px); box-shadow: 0 12px 36px rgba(245,165,33,0.4); }
-    .btn-secondary {
-      background: var(--s2); color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .btn-secondary:hover { background: var(--s3); border-color: var(--bup); }
-
-    /* App Store badge — recreation of Apple's "Download on the App Store"
-       black pill. Sized to sit alongside .btn-secondary at equal optical
-       weight. Layout matches Apple's marketing guidelines (corner radius,
-       proportional Apple-glyph + double-line text). */
-    .app-store-badge {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: #000;
-      color: #fff;
-      padding: 9px 18px;
-      border-radius: 13px;
-      border: 1px solid rgba(255,255,255,0.18);
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-      will-change: transform;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04) inset;
-    }
-    .app-store-badge:hover {
-      border-color: rgba(255,255,255,0.32);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.08) inset;
-    }
-    .app-store-badge svg.apple-glyph { width: 22px; height: 26px; flex-shrink: 0; fill: #fff; }
-    .app-store-badge .badge-lines {
-      display: flex; flex-direction: column; gap: 1px; line-height: 1;
-    }
-    .app-store-badge .badge-pre {
-      font-size: 10px; font-weight: 500; letter-spacing: 0.02em; opacity: 0.85;
-    }
-    .app-store-badge .badge-name {
-      font-size: 18px; font-weight: 600; letter-spacing: -0.01em;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 10px 24px rgba(0, 0, 0, 0.26);
+      font-size: 15px;
+      font-weight: 900;
     }
 
-    /* Trust micro-line under the CTA row. Three short claims, dot-separated. */
-    .trust-line {
-      margin-top: 22px;
-      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
-      font-size: 12px; font-weight: 500;
-      color: var(--muted);
-      animation: fadeUp 0.7s ease 0.46s both;
-    }
-    .trust-line .trust-dot {
-      width: 3px; height: 3px; border-radius: 50%;
-      background: var(--muted2); flex-shrink: 0;
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
-    /* Star rating row. Five amber stars + a single-line attribution.
-       Marker comment in HTML notes how to swap to real App Store data. */
-    .star-row {
-      margin-top: 14px;
-      display: flex; align-items: center; gap: 10px;
-      animation: fadeUp 0.7s ease 0.54s both;
+    .nav-links a {
+      min-height: 42px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 12px;
+      padding: 0 13px;
+      color: rgba(246, 251, 248, 0.72);
+      font-size: 14px;
+      font-weight: 700;
+      transition: color 0.16s ease, background 0.16s ease;
     }
-    .stars {
-      display: inline-flex; gap: 2px;
-      color: var(--amber);
-      filter: drop-shadow(0 0 8px rgba(245,165,33,0.18));
-    }
-    .stars svg { width: 14px; height: 14px; }
-    .star-attr {
-      font-size: 12px; font-weight: 600; color: var(--text);
-    }
-    .star-attr span { color: var(--muted); font-weight: 500; }
 
-    /* ── Phone fan ──
-       Three CSS phones — main + 2 aux fanned behind. Each aux phone is
-       slightly smaller, rotated, and dimmed so the eye still reads the
-       main hero phone first. */
-    .phone-stack {
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-invert);
+      outline: none;
+    }
+
+    .nav-links .nav-cta {
+      background: var(--text-invert);
+      color: var(--ink);
+      padding: 0 16px;
+      margin-left: 4px;
+    }
+
+    .nav-links .nav-cta:hover,
+    .nav-links .nav-cta:focus-visible {
+      background: var(--amber);
+      color: var(--ink);
+    }
+
+    .hero {
       position: relative;
-      display: flex; align-items: center; justify-content: center;
-      animation: fadeUp 0.9s ease 0.2s both;
-      min-height: 580px;
+      min-height: calc(92svh - 72px);
+      overflow: hidden;
+      isolation: isolate;
     }
-    .phone-glow {
+
+    .hero::before {
+      content: "";
       position: absolute;
-      width: 380px; height: 380px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(245,165,33,0.18) 0%, transparent 65%);
-      top: 50%; left: 50%; transform: translate(-50%,-50%);
-      filter: blur(40px);
-      animation: glowPulse 4s ease-in-out infinite;
-      pointer-events: none;
-      z-index: 1;
+      inset: auto -8vw -190px -8vw;
+      height: 360px;
+      z-index: -1;
+      background: linear-gradient(to bottom, transparent, rgba(50, 213, 131, 0.08) 38%, transparent);
+      transform: skewY(-4deg);
     }
-    @keyframes glowPulse {
-      0%,100% { opacity: 0.6; transform: translate(-50%,-50%) scale(1); }
-      50% { opacity: 1; transform: translate(-50%,-50%) scale(1.08); }
-    }
-    .phone {
-      position: relative;
-      width: 270px;
-      background: linear-gradient(165deg, #2d2d2c, #1a1a18);
-      border-radius: 46px;
-      padding: 11px;
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.11),
-        0 0 0 2px rgba(0,0,0,0.9),
-        inset 0 0 0 1px rgba(255,255,255,0.04),
-        0 50px 130px rgba(0,0,0,0.65),
-        0 0 60px rgba(245,165,33,0.08);
-      transform: rotate(1.5deg);
-    }
-    .phone::before {
-      content: '';
-      position: absolute;
-      left: -3px; top: 108px;
-      width: 3px; height: 72px;
-      background: linear-gradient(180deg, #252523 0%, #2e2e2c 40%, #252523 100%);
-      border-radius: 2px 0 0 2px;
-      box-shadow: 0 0 0 .5px rgba(255,255,255,0.07), 0 34px 0 #252523, 0 34px 0 0 rgba(255,255,255,0.07);
-    }
-    .phone::after {
-      content: '';
-      position: absolute;
-      right: -3px; top: 148px;
-      width: 3px; height: 52px;
-      background: linear-gradient(180deg, #252523 0%, #2e2e2c 40%, #252523 100%);
-      border-radius: 0 2px 2px 0;
-      box-shadow: 0 0 0 .5px rgba(255,255,255,0.07);
-    }
-    .phone-main {
+
+    .hero-copy {
       position: relative;
       z-index: 3;
+      width: min(720px, 100%);
+      padding: clamp(56px, 8vw, 104px) 0 clamp(86px, 12vw, 148px);
+      color: var(--text-invert);
     }
-    .phone-aux {
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+      color: rgba(246, 251, 248, 0.76);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+
+    .hero-kicker::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--mint);
+      box-shadow: 0 0 0 7px rgba(50, 213, 131, 0.14);
+    }
+
+    h1 {
+      max-width: 720px;
+      color: var(--text-invert);
+      font-size: clamp(58px, 9.2vw, 116px);
+      line-height: 0.91;
+      letter-spacing: -0.075em;
+      font-weight: 900;
+    }
+
+    h1 span {
+      display: inline-block;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: -0.035em;
+      color: var(--amber-2);
+    }
+
+    .hero-lead {
+      width: min(610px, 100%);
+      margin-top: 26px;
+      color: var(--text-invert-soft);
+      font-size: clamp(17px, 2vw, 20px);
+      line-height: 1.62;
+      font-weight: 500;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .app-store-badge {
+      min-height: 56px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      padding: 10px 18px;
+      border-radius: 15px;
+      background: #000;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 0 18px 48px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .app-store-badge:hover,
+    .app-store-badge:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.34);
+      box-shadow: 0 22px 56px rgba(0, 0, 0, 0.46), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+      outline: none;
+    }
+
+    .app-store-badge svg,
+    .android-badge svg {
+      width: 23px;
+      height: 28px;
+      fill: currentColor;
+      flex: 0 0 auto;
+    }
+
+    .badge-lines {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      line-height: 1;
+    }
+
+    .badge-pre {
+      font-size: 10px;
+      font-weight: 500;
+      opacity: 0.82;
+    }
+
+    .badge-name {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .android-badge {
+      min-height: 50px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 9px 15px;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.07);
+      color: rgba(246, 251, 248, 0.82);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      cursor: default;
+      user-select: none;
+    }
+
+    .android-badge svg {
+      width: 20px;
+      height: 22px;
+      color: var(--mint);
+      opacity: 0.92;
+    }
+
+    .android-badge .badge-name {
+      color: var(--text-invert);
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .android-badge .badge-pre {
+      color: rgba(246, 251, 248, 0.56);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .button-secondary {
+      min-height: 56px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 22px;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: var(--text-invert);
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 15px;
+      font-weight: 800;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+
+    .button-secondary:hover,
+    .button-secondary:focus-visible {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.24);
+      outline: none;
+    }
+
+    .hero-trust {
+      margin-top: 22px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: rgba(246, 251, 248, 0.62);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .hero-trust span + span::before {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      margin: 0 10px 2px 0;
+      border-radius: 50%;
+      background: rgba(246, 251, 248, 0.34);
+      vertical-align: middle;
+    }
+
+    .hero-devices {
       position: absolute;
-      top: 50%;
-      width: 220px;
-      opacity: 0.55;
-      filter: blur(0.4px);
+      z-index: 1;
+      right: max(-90px, calc((100vw - 1180px) / 2 - 110px));
+      bottom: -44px;
+      width: min(740px, 58vw);
+      height: min(680px, 74svh);
       pointer-events: none;
+    }
+
+    .device-shadow {
+      position: absolute;
+      left: 13%;
+      right: 8%;
+      bottom: 20px;
+      height: 68px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.5);
+      filter: blur(24px);
+      transform: rotate(-4deg);
+    }
+
+    .phone {
+      position: absolute;
+      width: 278px;
+      border-radius: 48px;
+      padding: 11px;
+      background: linear-gradient(155deg, #343936, #0d1110 58%);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.13),
+        0 0 0 2px rgba(0, 0, 0, 0.92),
+        inset 0 1px 1px rgba(255, 255, 255, 0.12),
+        0 42px 110px rgba(0, 0, 0, 0.58);
+    }
+
+    .phone-main {
+      right: 210px;
+      bottom: 58px;
+      z-index: 3;
+      transform: rotate(-6deg);
+    }
+
+    .phone-progress {
+      right: 0;
+      bottom: 34px;
+      z-index: 2;
+      transform: rotate(8deg) scale(0.94);
+    }
+
+    .phone-coach {
+      right: 420px;
+      bottom: 42px;
+      z-index: 1;
+      transform: rotate(-16deg) scale(0.86);
+      opacity: 0.88;
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 18px;
+      width: 78px;
+      height: 23px;
+      border-radius: 999px;
+      background: #000;
+      transform: translateX(-50%);
       z-index: 2;
     }
-    .phone-aux--left  {
-      left: 0;
-      transform: translateY(-50%) rotate(-10deg);
-      animation: auxFadeL 1s ease 0.4s both;
-    }
-    .phone-aux--right {
-      right: 0;
-      transform: translateY(-50%) rotate(10deg);
-      animation: auxFadeR 1s ease 0.55s both;
-    }
-    @keyframes auxFadeL {
-      from { opacity: 0; transform: translateY(-50%) rotate(-14deg) translateX(60px); }
-      to   { opacity: 0.55; transform: translateY(-50%) rotate(-10deg); }
-    }
-    @keyframes auxFadeR {
-      from { opacity: 0; transform: translateY(-50%) rotate(14deg) translateX(-60px); }
-      to   { opacity: 0.55; transform: translateY(-50%) rotate(10deg); }
-    }
-    .phone-aux .phone-glow { display: none; }
 
     .screen {
-      background: #0e100f;
-      border-radius: 37px;
-      overflow: hidden;
-      border: .5px solid rgba(255,255,255,0.05);
-      aspect-ratio: 9/19.5;
-      display: flex; flex-direction: column;
-    }
-    .di {
-      width: 90px; height: 26px;
-      background: #000; border-radius: 999px;
-      margin: 10px auto 0;
-      flex-shrink: 0;
-      box-shadow: 0 0 0 .5px rgba(255,255,255,0.04);
-    }
-    .status-bar {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 6px 18px 0;
-      font-size: 10.5px; font-weight: 700;
-      color: rgba(237,232,224,0.9);
-      flex-shrink: 0;
-    }
-    .sb-icons { display: flex; align-items: center; gap: 4px; font-size: 8px; }
-    .battery {
-      display: inline-flex; align-items: center; gap: 1px;
-    }
-    .battery-body {
-      width: 18px; height: 9px; border-radius: 2px;
-      border: 1px solid rgba(255,255,255,0.4);
-      padding: 1.5px;
       position: relative;
-    }
-    .battery-body::after {
-      content: ''; position: absolute;
-      right: -4px; top: 50%; transform: translateY(-50%);
-      width: 2px; height: 5px; background: rgba(255,255,255,0.35);
-      border-radius: 0 1px 1px 0;
-    }
-    .battery-fill {
-      height: 100%; width: 65%;
-      background: #5dac83; border-radius: 1px;
-    }
-    .screen-content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-    .scr-top {
-      padding: 12px 16px 10px;
-      border-bottom: .5px solid rgba(255,255,255,0.06);
-      background: linear-gradient(180deg, rgba(245,165,33,0.09) 0%, transparent 100%);
-    }
-    .scr-top.scr-top--insights {
-      background: linear-gradient(180deg, rgba(93,172,131,0.10) 0%, transparent 100%);
-    }
-    .scr-top.scr-top--coach {
-      background: linear-gradient(180deg, rgba(40,70,90,0.20) 0%, transparent 100%);
-    }
-    .scr-top.scr-top--routines {
-      background: linear-gradient(180deg, rgba(120,90,160,0.18) 0%, transparent 100%);
-    }
-    .live-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 9px; font-weight: 800; letter-spacing: 0.1em;
-      text-transform: uppercase; color: var(--amber);
-    }
-    .live-badge.live-badge--green { color: var(--green); }
-    .live-badge.live-badge--blue  { color: #6db4e0; }
-    .live-badge.live-badge--purple { color: #a78bd0; }
-    .scr-timer {
-      font-size: 34px; font-weight: 700;
-      letter-spacing: -0.02em;
-      font-variant-numeric: tabular-nums;
-      color: var(--text);
-      margin-top: 4px; line-height: 1;
-    }
-    .scr-timer-label { font-size: 9px; color: rgba(237,232,224,0.38); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 2px; }
-    .scr-metrics {
-      display: grid; grid-template-columns: repeat(3,1fr);
-      gap: 6px; padding: 10px 12px;
-    }
-    .scr-metric {
-      background: rgba(255,255,255,0.05);
-      border: .5px solid rgba(255,255,255,0.07);
-      border-radius: 10px; padding: 8px 8px 7px;
-    }
-    .scr-metric span { display: block; font-size: 8px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(237,232,224,0.38); margin-bottom: 3px; }
-    .scr-metric strong { font-size: 15px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
-    .scr-card {
-      background: rgba(255,255,255,0.05);
-      border: .5px solid rgba(255,255,255,0.08);
-      border-radius: 12px; margin: 0 10px 8px;
-      padding: 10px;
-    }
-    .scr-card-lbl { font-size: 8px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(237,232,224,0.36); margin-bottom: 5px; }
-    .scr-card-title { font-size: 13.5px; font-weight: 650; color: var(--text); line-height: 1.2; margin-bottom: 8px; }
-    .scr-set-row { display: grid; grid-template-columns: 1fr 1fr 28px; gap: 5px; align-items: center; }
-    .scr-pill {
-      background: rgba(255,255,255,0.07); border: .5px solid rgba(255,255,255,0.08);
-      border-radius: 7px; padding: 6px 6px; font-size: 11px; font-weight: 600; color: rgba(237,232,224,0.9); text-align: center;
-    }
-    .scr-check {
-      width: 28px; height: 28px; border-radius: 50%;
-      background: var(--amber); color: #14100a;
-      display: grid; place-items: center; font-size: 11px; font-weight: 900;
-      box-shadow: 0 2px 10px rgba(245,165,33,0.35);
-    }
-    .scr-coach {
-      background: rgba(30,50,38,0.55);
-      border: .5px solid rgba(93,172,131,0.18);
-      border-radius: 12px; margin: 0 10px;
-      padding: 9px 10px;
-    }
-    .scr-coach-text { font-size: 10.5px; color: rgba(237,232,224,0.72); line-height: 1.4; }
-
-    /* Insights screen — bar chart + index score. Used in the aux left
-       phone in the hero, and in the screenshots gallery. */
-    .scr-insights-score {
-      display: flex; align-items: baseline; gap: 8px;
-      padding: 12px 16px 6px;
-    }
-    .scr-insights-score .num {
-      font-size: 38px; font-weight: 800; letter-spacing: -0.03em;
-      color: var(--text); line-height: 1;
-    }
-    .scr-insights-score .lbl {
-      font-size: 9px; font-weight: 700; letter-spacing: 0.07em;
-      text-transform: uppercase; color: rgba(237,232,224,0.44);
-    }
-    .scr-insights-trend {
-      display: inline-flex; align-items: center; gap: 4px;
-      margin-left: auto;
-      font-size: 10px; font-weight: 700; color: var(--green);
-      padding: 3px 7px; border-radius: 6px;
-      background: rgba(93,172,131,0.12);
-      border: .5px solid rgba(93,172,131,0.18);
-    }
-    .scr-bars {
-      padding: 4px 12px 12px;
-      display: grid; grid-template-columns: repeat(7, 1fr);
-      gap: 5px; align-items: end; height: 88px;
-    }
-    .scr-bar {
-      background: linear-gradient(180deg, rgba(93,172,131,0.55), rgba(93,172,131,0.18));
-      border-radius: 3px 3px 0 0;
-      min-height: 8px;
-    }
-
-    /* Coach screen — chat bubbles. */
-    .scr-chat { padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
-    .scr-bubble {
-      max-width: 86%;
-      padding: 9px 11px; border-radius: 12px;
-      font-size: 11px; line-height: 1.4;
-    }
-    .scr-bubble--coach {
-      align-self: flex-start;
-      background: rgba(255,255,255,0.06);
-      color: rgba(237,232,224,0.86);
-      border: .5px solid rgba(255,255,255,0.06);
-    }
-    .scr-bubble--user {
-      align-self: flex-end;
-      background: rgba(245,165,33,0.18);
-      color: #fff;
-      border: .5px solid rgba(245,165,33,0.32);
-    }
-
-    /* Routines screen — list of routine rows. */
-    .scr-routines { padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
-    .scr-routine {
-      display: grid; grid-template-columns: 1fr auto;
-      align-items: center; gap: 8px;
-      background: rgba(255,255,255,0.04);
-      border: .5px solid rgba(255,255,255,0.06);
-      border-radius: 10px;
-      padding: 10px 11px;
-    }
-    .scr-routine-name { font-size: 12px; font-weight: 650; color: var(--text); }
-    .scr-routine-meta { font-size: 9px; color: rgba(237,232,224,0.46); margin-top: 1px; letter-spacing: 0.02em; }
-    .scr-routine-cta {
-      width: 22px; height: 22px; border-radius: 50%;
-      background: var(--amber); color: #14100a;
-      display: grid; place-items: center; font-size: 10px; font-weight: 900;
-    }
-
-    /* ── Sections ── */
-    section { padding: 96px 0; }
-    .sec-eyebrow {
-      display: inline-flex; align-items: center; gap: 7px;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-      color: var(--amber); opacity: 0.85; margin-bottom: 18px;
-    }
-    .sec-rule { width: 18px; height: 1.5px; background: var(--amber); border-radius: 1px; }
-    h2 {
-      font-size: clamp(34px, 4.5vw, 54px);
-      font-weight: 800; letter-spacing: -0.035em; line-height: 1.06;
-      color: var(--text); margin-bottom: 14px;
-    }
-    h2 em {
-      font-family: 'Instrument Serif', serif;
-      font-style: italic; font-weight: 400;
-      color: var(--amber); letter-spacing: -0.02em;
-    }
-    .sec-lead { color: var(--muted); font-size: 18px; line-height: 1.62; max-width: 600px; margin-bottom: 48px; }
-
-    /* ── Feature cards ── */
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 14px;
-    }
-    .card {
-      background: var(--s1);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 26px;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-      position: relative;
+      min-height: 600px;
+      aspect-ratio: 9 / 19.5;
       overflow: hidden;
-    }
-    /* Top-edge shimmer that sweeps in on hover. */
-    .card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(245,165,33,0.45), transparent);
-      transform: translateX(-100%);
-      transition: transform 0.6s ease;
-    }
-    .card:hover::before { transform: translateX(0); }
-    .card:hover {
-      border-color: var(--bup);
-      transform: translateY(-3px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    }
-    .card-num {
-      font-size: 12px; font-weight: 800; letter-spacing: 0.06em;
-      color: var(--amber); opacity: 0.7; margin-bottom: 18px;
-      font-variant-numeric: tabular-nums;
-    }
-    .card h3 { font-size: 19px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.02em; }
-    .card p { color: var(--muted); line-height: 1.6; font-size: 15px; margin-bottom: 20px; }
-
-    /* mini mockups inside cards */
-    .card-visual {
-      border-radius: 12px;
-      background: var(--s2);
-      border: 1px solid var(--border);
-      padding: 14px;
-      margin-top: 4px;
-    }
-    .mini-set { display: flex; gap: 6px; align-items: center; }
-    .mini-pill {
-      flex: 1; background: var(--s3); border: 1px solid var(--border);
-      border-radius: 8px; padding: 7px 10px; font-size: 12px; font-weight: 600;
-      color: var(--text); text-align: center;
-    }
-    .mini-check {
-      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
-      background: var(--amber); color: #14100a;
-      display: grid; place-items: center; font-size: 11px; font-weight: 900;
-    }
-    .mini-coach-line {
-      display: flex; align-items: flex-start; gap: 9px;
-      font-size: 12.5px; color: rgba(237,232,224,0.72); line-height: 1.4;
-    }
-    .mini-coach-icon {
-      width: 24px; height: 24px; border-radius: 7px;
-      background: var(--forest2); border: 1px solid rgba(93,172,131,0.2);
-      display: grid; place-items: center; flex-shrink: 0;
-      font-size: 11px;
-    }
-    .mini-watch {
-      display: flex; align-items: center; justify-content: center; gap: 14px;
-    }
-    .watch-face {
-      width: 52px; height: 62px; border-radius: 16px;
-      background: var(--s3); border: 1px solid var(--border);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 2px;
-    }
-    .watch-time { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
-    .watch-lbl { font-size: 7px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted2); }
-    .watch-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--amber); }
-    .watch-meta { display: flex; flex-direction: column; gap: 4px; }
-    .watch-meta-row { font-size: 11px; color: var(--muted); }
-    .watch-meta-row strong { color: var(--text); font-weight: 600; margin-right: 4px; }
-
-    /* ── Screenshots gallery ── */
-    .gallery-shell { position: relative; }
-    .gallery-track {
-      display: grid;
-      grid-auto-flow: column;
-      grid-auto-columns: minmax(220px, 240px);
-      gap: 22px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scroll-padding: 0 22px;
-      padding: 12px 4px 28px;
-      margin: 0 -4px;
-      scrollbar-width: none;
-    }
-    .gallery-track::-webkit-scrollbar { display: none; }
-    .gallery-slide {
-      scroll-snap-align: start;
-      display: flex; flex-direction: column; align-items: center; gap: 16px;
-    }
-    .gallery-slide .phone {
-      width: 240px; transform: rotate(0);
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.10),
-        0 0 0 2px rgba(0,0,0,0.85),
-        inset 0 0 0 1px rgba(255,255,255,0.04),
-        0 32px 80px rgba(0,0,0,0.55);
-    }
-    .gallery-slide .phone::before,
-    .gallery-slide .phone::after { display: none; }
-    .gallery-caption {
-      display: flex; flex-direction: column; gap: 4px; text-align: center;
-      max-width: 240px;
-    }
-    .gallery-caption strong {
-      font-size: 13px; font-weight: 700; color: var(--text);
-      letter-spacing: -0.01em;
-    }
-    .gallery-caption span {
-      font-size: 12px; color: var(--muted); line-height: 1.45;
-    }
-    .gallery-nav {
-      position: absolute; top: 12px; right: 0;
-      display: flex; gap: 8px;
-    }
-    .gallery-btn {
-      width: 38px; height: 38px; border-radius: 50%;
-      background: var(--s2); border: 1px solid var(--border);
-      color: var(--text); cursor: pointer;
-      display: grid; place-items: center;
-      transition: all 0.18s ease;
-    }
-    .gallery-btn:hover { background: var(--s3); border-color: var(--bup); }
-    .gallery-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-    .gallery-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
-    @media (max-width: 600px) {
-      .gallery-nav { display: none; }
+      border-radius: 39px;
+      background: #0c100e;
+      border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
-    /* ── Voice / social proof ── */
-    .voice-cards {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-    .voice-card {
-      background: var(--s1);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 26px;
-      display: flex; flex-direction: column; gap: 16px;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-      position: relative; overflow: hidden;
-    }
-    .voice-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(245,165,33,0.45), transparent);
-      transform: translateX(-100%); transition: transform 0.6s ease;
-    }
-    .voice-card:hover::before { transform: translateX(0); }
-    .voice-card:hover {
-      border-color: var(--bup);
-      transform: translateY(-3px);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    }
-    .voice-quote {
-      font-size: 16px; line-height: 1.5;
-      color: var(--text); font-weight: 500;
-      letter-spacing: -0.005em;
-    }
-    .voice-quote em {
-      font-family: 'Instrument Serif', serif; font-style: italic;
-      color: var(--amber); font-weight: 400;
-    }
-    .voice-attribution {
-      display: flex; align-items: center; gap: 10px;
-      margin-top: auto;
-    }
-    .voice-avatar {
-      width: 36px; height: 36px; border-radius: 50%;
-      background: linear-gradient(145deg, #1c1c18, #2e2514);
-      border: 1px solid rgba(245,165,33,0.22);
-      color: var(--amber);
-      display: grid; place-items: center;
-      font-weight: 800; font-size: 13px;
-      flex-shrink: 0;
-    }
-    .voice-avatar.voice-avatar--green {
-      background: linear-gradient(145deg, #142019, #1f3a2e);
-      border-color: rgba(93,172,131,0.25); color: var(--green);
-    }
-    .voice-avatar.voice-avatar--neutral {
-      background: linear-gradient(145deg, #1a1d1b, #242824);
-      border-color: var(--bup); color: var(--text);
-    }
-    .voice-name { font-size: 13px; font-weight: 700; color: var(--text); }
-    .voice-role { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
-
-    .voice-stats {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 4px;
-      padding: 14px 0 4px;
-      border-top: 1px solid var(--border);
-      margin-top: 4px;
-    }
-    .voice-stat {
-      display: flex; flex-direction: column; gap: 2px;
-      align-items: flex-start;
-    }
-    .voice-stat .num {
-      font-size: 22px; font-weight: 800; letter-spacing: -0.02em;
-      color: var(--text); font-variant-numeric: tabular-nums;
-    }
-    .voice-stat .lbl {
-      font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
-      text-transform: uppercase; color: var(--muted);
-    }
-
-    /* ── FAQ ── */
-    .faq-list {
-      display: flex; flex-direction: column; gap: 10px;
-      max-width: 820px;
-    }
-    .faq-item {
-      background: var(--s1); border: 1px solid var(--border);
-      border-radius: 16px;
-      transition: border-color 0.2s ease, background 0.2s ease;
-    }
-    .faq-item[open] {
-      border-color: rgba(245,165,33,0.22);
-      background: linear-gradient(160deg, var(--s1), rgba(245,165,33,0.03));
-    }
-    .faq-q {
-      list-style: none;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 16px;
-      padding: 18px 22px;
-      font-size: 16px; font-weight: 650;
-      color: var(--text);
-      letter-spacing: -0.01em;
-    }
-    .faq-q::-webkit-details-marker { display: none; }
-    .faq-chev {
-      width: 28px; height: 28px; border-radius: 50%;
-      background: var(--s2); border: 1px solid var(--border);
-      display: grid; place-items: center;
-      transition: transform 0.25s ease, background 0.2s ease, border-color 0.2s ease;
-      flex-shrink: 0;
-    }
-    .faq-chev svg { width: 12px; height: 12px; stroke: var(--text); fill: none; stroke-width: 2; }
-    .faq-item[open] .faq-chev {
-      transform: rotate(45deg);
-      background: var(--amber);
-      border-color: var(--amber);
-    }
-    .faq-item[open] .faq-chev svg { stroke: #14100a; }
-    .faq-a {
-      padding: 0 22px 20px;
-      color: var(--muted);
-      font-size: 14.5px; line-height: 1.6;
-    }
-    .faq-a a { color: var(--amber); border-bottom: 1px solid rgba(245,165,33,0.3); }
-    .faq-a a:hover { border-bottom-color: var(--amber); }
-
-    /* ── Privacy band ── */
-    .band-section { padding: 0 0 96px; }
-    .band {
-      background: linear-gradient(135deg, var(--forest) 0%, var(--forest2) 100%);
-      border: 1px solid rgba(93,172,131,0.12);
-      border-radius: 24px;
-      padding: 44px 48px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 30px;
-      align-items: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .band::before {
-      content: '';
+    .screen::before {
+      content: "";
       position: absolute;
-      top: -80px; right: -80px;
-      width: 300px; height: 300px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(93,172,131,0.08) 0%, transparent 70%);
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent 22%, transparent 64%, rgba(255, 255, 255, 0.04));
       pointer-events: none;
     }
-    .band h2 { color: #e8f5ee; font-size: clamp(26px, 3.5vw, 40px); margin-bottom: 10px; }
-    .band h2 em { color: var(--green); }
-    .band p { color: rgba(232,245,238,0.6); font-size: 16px; line-height: 1.6; max-width: 560px; margin: 0; }
-    .btn-band {
-      background: rgba(93,172,131,0.15);
-      color: #b8e8d0;
-      border: 1px solid rgba(93,172,131,0.25);
-      white-space: nowrap;
-      font-size: 14px; font-weight: 650;
-      padding: 13px 22px; border-radius: 13px;
-      transition: all 0.18s ease; text-decoration: none;
-      display: inline-block;
-    }
-    .btn-band:hover { background: rgba(93,172,131,0.25); border-color: rgba(93,172,131,0.4); }
 
-    /* ── Last call ── */
-    .last-call {
-      text-align: center;
-      padding: 56px 0 96px;
+    .mock-status {
+      height: 54px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      padding: 0 22px 10px;
+      color: rgba(246, 251, 248, 0.88);
+      font-size: 11px;
+      font-weight: 800;
     }
-    .last-call h2 {
-      font-size: clamp(48px, 7vw, 80px);
-      letter-spacing: -0.04em;
+
+    .screen-pad {
+      padding: 0 15px 16px;
+    }
+
+    .screen-title {
+      margin: 7px 0 14px;
+    }
+
+    .screen-label {
+      color: var(--amber);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+
+    .screen-title strong {
+      display: block;
+      margin-top: 6px;
+      color: var(--text-invert);
+      font-size: 27px;
       line-height: 1;
-      margin-bottom: 22px;
+      letter-spacing: -0.04em;
     }
-    .last-call p {
-      color: var(--muted);
-      font-size: 14px;
+
+    .mock-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      margin-bottom: 11px;
+    }
+
+    .mock-metric,
+    .mock-panel,
+    .mock-row {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .mock-metric {
+      border-radius: 13px;
+      padding: 10px 8px;
+    }
+
+    .mock-metric span {
+      display: block;
+      color: rgba(246, 251, 248, 0.46);
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .mock-metric b {
+      display: block;
+      margin-top: 4px;
+      color: var(--text-invert);
+      font-size: 18px;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mock-panel {
+      border-radius: 17px;
+      padding: 13px;
+      margin-bottom: 10px;
+    }
+
+    .mock-panel h3 {
+      color: var(--text-invert);
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .set-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 34px;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .set-cell {
+      min-height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      color: var(--text-invert);
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .set-check {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--amber);
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    .coach-note {
+      color: rgba(246, 251, 248, 0.72);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .chart-row {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 7px;
+      align-items: end;
+      height: 132px;
+      padding: 15px 4px 6px;
+    }
+
+    .chart-bar {
+      min-height: 12px;
+      border-radius: 8px 8px 3px 3px;
+      background: linear-gradient(to bottom, var(--mint), rgba(50, 213, 131, 0.18));
+    }
+
+    .score-ring {
+      width: 128px;
+      height: 128px;
+      display: grid;
+      place-items: center;
+      margin: 16px auto 8px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at center, #0c100e 0 55%, transparent 56%),
+        conic-gradient(var(--mint) 0 82%, rgba(255, 255, 255, 0.08) 82% 100%);
+    }
+
+    .score-ring span {
+      color: var(--text-invert);
+      font-size: 39px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+    }
+
+    .mock-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 14px;
+      color: var(--text-invert);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .mock-row span:last-child {
+      color: var(--mint);
+    }
+
+    .chat {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .bubble {
+      max-width: 92%;
+      padding: 11px 12px;
+      border-radius: 15px;
+      color: rgba(246, 251, 248, 0.84);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .bubble.user {
+      align-self: end;
+      background: rgba(255, 179, 34, 0.18);
+      border-color: rgba(255, 179, 34, 0.26);
+      color: #fff;
+    }
+
+    .watch {
+      position: absolute;
+      right: 134px;
+      bottom: 28px;
+      z-index: 5;
+      width: 154px;
+      border-radius: 42px;
+      padding: 12px;
+      background: linear-gradient(145deg, #2d3330, #070908);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.12),
+        0 30px 72px rgba(0, 0, 0, 0.56);
+      transform: rotate(4deg);
+    }
+
+    .watch::before,
+    .watch::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      width: 62px;
+      height: 42px;
+      transform: translateX(-50%);
+      background: #101412;
+      z-index: -1;
+    }
+
+    .watch::before {
+      top: -28px;
+      border-radius: 24px 24px 10px 10px;
+    }
+
+    .watch::after {
+      bottom: -28px;
+      border-radius: 10px 10px 24px 24px;
+    }
+
+    .watch-screen {
+      min-height: 170px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 32px;
+      background: #050706;
+      color: var(--text-invert);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .watch-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--mint);
+    }
+
+    .watch-time {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .watch-caption {
+      color: rgba(246, 251, 248, 0.5);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .proof {
+      position: relative;
+      z-index: 5;
+      color: var(--text-invert);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035));
+    }
+
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .proof-item {
+      min-height: 126px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 7px;
+      padding: 22px 24px;
+      border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .proof-item:last-child {
+      border-right: none;
+    }
+
+    .proof-item strong {
+      font-size: clamp(24px, 3vw, 36px);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--text-invert);
+    }
+
+    .proof-item span {
+      color: rgba(246, 251, 248, 0.62);
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .section {
+      position: relative;
+      padding: clamp(76px, 9vw, 124px) 0;
+      background: var(--paper);
+    }
+
+    .section.dark {
+      background: var(--ink);
+      color: var(--text-invert);
+    }
+
+    .section.soft {
+      background: var(--paper-2);
+    }
+
+    .section-head {
+      width: min(760px, 100%);
+      margin-bottom: 44px;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--text-faint);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .section.dark .section-label {
+      color: rgba(246, 251, 248, 0.48);
+    }
+
+    .section-label::before {
+      content: "";
+      width: 22px;
+      height: 2px;
+      border-radius: 99px;
+      background: var(--amber);
+    }
+
+    h2 {
+      max-width: 780px;
+      font-size: clamp(38px, 5vw, 68px);
+      line-height: 0.98;
+      letter-spacing: -0.065em;
+      color: var(--text);
+      font-weight: 900;
+    }
+
+    .section.dark h2 {
+      color: var(--text-invert);
+    }
+
+    h2 em {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      color: var(--amber);
+    }
+
+    .section-lead {
+      max-width: 640px;
       margin-top: 18px;
-      max-width: 360px;
-      margin-left: auto; margin-right: auto;
-      line-height: 1.5;
+      color: var(--text-soft);
+      font-size: 18px;
+      line-height: 1.62;
+      font-weight: 500;
     }
-    .last-call .app-store-badge { animation: fadeUp 0.7s ease 0.05s both; }
 
-    /* ── Footer ── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 26px 0 38px;
+    .section.dark .section-lead {
+      color: var(--text-invert-soft);
     }
+
+    .feature-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(420px, 1.08fr);
+      gap: clamp(34px, 5vw, 72px);
+      align-items: center;
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .feature-row {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 18px;
+      border-radius: var(--radius);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 34px rgba(8, 10, 9, 0.05);
+    }
+
+    .section.dark .feature-row {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--line-dark);
+      box-shadow: none;
+    }
+
+    .feature-icon {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--ink);
+      color: var(--amber);
+    }
+
+    .feature-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .feature-row h3 {
+      color: inherit;
+      font-size: 19px;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+
+    .feature-row p {
+      color: var(--text-soft);
+      line-height: 1.55;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .section.dark .feature-row p {
+      color: rgba(246, 251, 248, 0.64);
+    }
+
+    .workout-board {
+      position: relative;
+      min-height: 560px;
+      border-radius: 34px;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(255, 179, 34, 0.2), transparent 38%),
+        linear-gradient(160deg, #111614, #1a231f);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(8, 10, 9, 0.1);
+    }
+
+    .workout-board .phone {
+      position: absolute;
+      left: 50%;
+      bottom: -42px;
+      transform: translateX(-50%) rotate(-3deg);
+    }
+
+    .board-ticket {
+      position: absolute;
+      left: 24px;
+      top: 24px;
+      width: min(270px, calc(100% - 48px));
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--ink);
+      box-shadow: 0 20px 54px rgba(0, 0, 0, 0.22);
+    }
+
+    .board-ticket span {
+      display: block;
+      color: var(--text-faint);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .board-ticket strong {
+      display: block;
+      color: var(--text);
+      font-size: 24px;
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+    }
+
+    .board-ticket p {
+      margin-top: 10px;
+      color: var(--text-soft);
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .analytics-card {
+      min-height: 220px;
+      padding: 24px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--line-dark);
+      overflow: hidden;
+    }
+
+    .analytics-card.large {
+      grid-column: span 7;
+    }
+
+    .analytics-card.medium {
+      grid-column: span 5;
+    }
+
+    .analytics-card.small {
+      grid-column: span 4;
+      min-height: 190px;
+    }
+
+    .analytics-card h3 {
+      color: var(--text-invert);
+      font-size: 20px;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .analytics-card p {
+      color: rgba(246, 251, 248, 0.62);
+      line-height: 1.55;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .wide-chart {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 10px;
+      align-items: end;
+      height: 150px;
+      margin-top: 22px;
+    }
+
+    .wide-chart span {
+      display: block;
+      min-height: 14px;
+      border-radius: 10px 10px 4px 4px;
+      background: linear-gradient(to bottom, var(--blue), rgba(116, 168, 255, 0.14));
+    }
+
+    .coach-panel {
+      margin-top: 22px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .coach-line {
+      padding: 14px;
+      border-radius: 15px;
+      color: rgba(246, 251, 248, 0.78);
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    .mini-stat {
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      min-height: 112px;
+    }
+
+    .mini-stat strong {
+      color: var(--text-invert);
+      font-size: 46px;
+      line-height: 1;
+      letter-spacing: -0.07em;
+    }
+
+    .mini-stat span {
+      margin-top: 10px;
+      color: rgba(246, 251, 248, 0.56);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .watch-section {
+      display: grid;
+      grid-template-columns: minmax(360px, 0.9fr) minmax(0, 1.1fr);
+      align-items: center;
+      gap: clamp(34px, 6vw, 82px);
+    }
+
+    .watch-stage {
+      min-height: 520px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border-radius: 34px;
+      background:
+        linear-gradient(145deg, rgba(255, 179, 34, 0.18), transparent 42%),
+        linear-gradient(180deg, #141a18, #080a09);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: var(--shadow);
+    }
+
+    .watch-stage .watch {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      width: 230px;
+      transform: rotate(-3deg);
+    }
+
+    .watch-stage .watch-screen {
+      min-height: 268px;
+      border-radius: 52px;
+    }
+
+    .watch-stage .watch-time {
+      font-size: 42px;
+    }
+
+    .sync-card {
+      position: absolute;
+      right: 22px;
+      bottom: 22px;
+      width: min(250px, calc(100% - 44px));
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.24);
+    }
+
+    .sync-card strong {
+      display: block;
+      color: var(--text);
+      font-size: 18px;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+
+    .sync-card span {
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    .share-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 0.84fr);
+      gap: clamp(34px, 5vw, 72px);
+      align-items: center;
+    }
+
+    .profile-card {
+      position: relative;
+      border-radius: 34px;
+      padding: 28px;
+      min-height: 500px;
+      color: var(--text-invert);
+      background:
+        linear-gradient(145deg, rgba(255, 255, 255, 0.12), transparent 28%),
+        linear-gradient(165deg, #151b18, #080a09);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .profile-avatar {
+      width: 64px;
+      height: 64px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: conic-gradient(from 220deg, var(--amber), var(--mint), var(--blue), var(--amber));
+      color: var(--ink);
+      font-weight: 900;
+      font-size: 24px;
+    }
+
+    .profile-top h3 {
+      font-size: 22px;
+      letter-spacing: -0.04em;
+    }
+
+    .profile-top p {
+      margin-top: 3px;
+      color: rgba(246, 251, 248, 0.56);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .profile-stat {
+      padding: 15px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .profile-stat strong {
+      display: block;
+      font-size: 26px;
+      letter-spacing: -0.06em;
+      color: var(--text-invert);
+    }
+
+    .profile-stat span {
+      display: block;
+      margin-top: 4px;
+      color: rgba(246, 251, 248, 0.48);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 10px;
+    }
+
+    .timeline-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 15px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .timeline-row strong {
+      color: var(--text-invert);
+      font-size: 15px;
+      letter-spacing: -0.02em;
+    }
+
+    .timeline-row span {
+      color: rgba(246, 251, 248, 0.5);
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 12px;
+      max-width: 850px;
+    }
+
+    .faq-item {
+      border-radius: 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 34px rgba(8, 10, 9, 0.05);
+      overflow: hidden;
+    }
+
+    .faq-q {
+      min-height: 64px;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px 22px;
+      cursor: pointer;
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .faq-q::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-plus {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--paper-3);
+      color: var(--text);
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .faq-plus svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+    }
+
+    .faq-item[open] .faq-plus {
+      transform: rotate(45deg);
+      background: var(--amber);
+    }
+
+    .faq-a {
+      padding: 0 22px 20px;
+      color: var(--text-soft);
+      font-size: 15px;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .faq-a a {
+      color: var(--text);
+      border-bottom: 1px solid var(--amber);
+      font-weight: 800;
+    }
+
+    .final-cta {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(82px, 11vw, 140px) 0;
+      color: var(--text-invert);
+      background:
+        linear-gradient(135deg, rgba(255, 179, 34, 0.16), transparent 44%),
+        linear-gradient(180deg, #111614, #080a09);
+      text-align: center;
+    }
+
+    .final-cta h2 {
+      margin: 0 auto;
+      color: var(--text-invert);
+      font-size: clamp(54px, 8vw, 104px);
+    }
+
+    .final-cta p {
+      max-width: 550px;
+      margin: 20px auto 30px;
+      color: var(--text-invert-soft);
+      font-size: 18px;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .final-store-row {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .site-footer {
+      background: var(--ink);
+      color: rgba(246, 251, 248, 0.58);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 30px 0 44px;
+    }
+
     .footer-inner {
-      display: flex; justify-content: space-between;
-      align-items: center; gap: 16px; flex-wrap: wrap;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
     }
-    .footer-brand { display: flex; align-items: center; gap: 10px; }
-    .footer-copy { font-size: 13px; color: var(--muted); }
-    .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .footer-brand .brand {
+      min-height: 38px;
+    }
+
+    .footer-brand .mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .footer-copy,
     .footer-links a {
-      font-size: 13px; font-weight: 600; color: var(--muted);
-      transition: color 0.15s;
-    }
-    .footer-links a:hover { color: var(--text); }
-
-    /* ── Scroll reveal ── */
-    .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.65s ease, transform 0.65s ease; }
-    .reveal.visible { opacity: 1; transform: none; }
-    .reveal-2 { transition-delay: 0.1s; }
-    .reveal-3 { transition-delay: 0.2s; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to   { opacity: 1; transform: none; }
+      color: rgba(246, 251, 248, 0.58);
+      font-size: 13px;
+      font-weight: 700;
     }
 
-    /* ── Divider ── */
-    .divider { height: 1px; background: var(--border); margin: 0; }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
 
-    /* ── Reduced motion ── */
+    .footer-links a:hover,
+    .footer-links a:focus-visible {
+      color: var(--text-invert);
+      outline: none;
+    }
+
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (max-width: 1080px) {
+      .hero-devices {
+        opacity: 0.62;
+        right: -190px;
+        width: 760px;
+      }
+
+      .phone-coach {
+        display: none;
+      }
+
+      .feature-layout,
+      .watch-section,
+      .share-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .workout-board {
+        min-height: 620px;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .wrap {
+        width: min(100% - 34px, 1180px);
+      }
+
+      .nav {
+        min-height: 66px;
+      }
+
+      .nav-links a:not(.nav-cta) {
+        display: none;
+      }
+
+      .nav-links .nav-cta {
+        min-height: 40px;
+        padding: 0 13px;
+        font-size: 13px;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .hero-copy {
+        padding: 48px 0 38px;
+      }
+
+      h1 {
+        font-size: clamp(50px, 16vw, 74px);
+      }
+
+      .hero-devices {
+        position: relative;
+        right: auto;
+        bottom: auto;
+        width: min(520px, 100%);
+        height: 520px;
+        margin: 0 auto -34px;
+        opacity: 1;
+      }
+
+      .phone-main {
+        right: 42%;
+        bottom: 32px;
+        transform: translateX(50%) rotate(-4deg) scale(0.9);
+      }
+
+      .phone-progress {
+        right: 4%;
+        bottom: 30px;
+        transform: rotate(8deg) scale(0.76);
+      }
+
+      .watch {
+        right: 54px;
+        bottom: 16px;
+        transform: rotate(5deg) scale(0.78);
+      }
+
+      .device-shadow {
+        bottom: 0;
+      }
+
+      .proof-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .proof-item:nth-child(2) {
+        border-right: none;
+      }
+
+      .proof-item:nth-child(1),
+      .proof-item:nth-child(2) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .analytics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .analytics-card,
+      .analytics-card.large,
+      .analytics-card.medium,
+      .analytics-card.small {
+        grid-column: 1;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hero-copy {
+        padding: 34px 0 18px;
+      }
+
+      .hero-lead {
+        margin-top: 18px;
+        font-size: 16px;
+        line-height: 1.52;
+      }
+
+      .hero-actions {
+        margin-top: 24px;
+      }
+
+      .hero-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .app-store-badge,
+      .android-badge,
+      .button-secondary {
+        width: 100%;
+      }
+
+      .hero-trust {
+        gap: 8px;
+      }
+
+      .hero-trust span {
+        width: 100%;
+      }
+
+      .hero-trust span + span::before {
+        display: none;
+      }
+
+      .hero-devices {
+        height: 286px;
+        margin: -28px auto -104px;
+      }
+
+      .phone {
+        width: 194px;
+      }
+
+      .screen {
+        min-height: 420px;
+      }
+
+      .phone-main {
+        right: 43%;
+        bottom: -36px;
+        transform: translateX(50%) rotate(-3deg) scale(0.72);
+      }
+
+      .phone-progress {
+        display: none;
+      }
+
+      .watch {
+        right: 6px;
+        bottom: -20px;
+        transform: rotate(6deg) scale(0.56);
+      }
+
+      .proof-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .proof-item {
+        min-height: 100px;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px 0;
+      }
+
+      .proof-item:last-child {
+        border-bottom: none;
+      }
+
+      .section {
+        padding: 68px 0;
+      }
+
+      h2 {
+        font-size: clamp(36px, 12vw, 50px);
+      }
+
+      .feature-row {
+        grid-template-columns: 1fr;
+      }
+
+      .workout-board {
+        min-height: 560px;
+        margin: 0 -6px;
+        border-radius: 26px;
+      }
+
+      .board-ticket {
+        left: 16px;
+        right: 16px;
+        top: 16px;
+        width: auto;
+      }
+
+      .watch-stage {
+        min-height: 470px;
+        border-radius: 26px;
+      }
+
+      .sync-card {
+        right: 16px;
+        bottom: 16px;
+      }
+
+      .profile-card {
+        padding: 20px;
+        border-radius: 26px;
+      }
+
+      .profile-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
+      *,
+      *::before,
+      *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
         transition-duration: 0.01ms !important;
       }
-      .orb, .orb-cursor, .phone-glow { animation: none !important; }
-      .orb-cursor { display: none; }
-      .reveal { opacity: 1; transform: none; }
-      html { scroll-behavior: auto; }
-    }
 
-    /* ── Responsive ── */
-    @media (max-width: 900px) {
-      section { padding: 72px 0; }
-      .hero { grid-template-columns: 1fr; min-height: auto; padding: 44px 0 52px; gap: 24px; }
-      .phone-stack { order: -1; min-height: 480px; }
-      .phone-aux { display: none; }
-      .phone { width: min(240px, 80vw); }
-      .cards, .voice-cards { grid-template-columns: 1fr; }
-      .band { grid-template-columns: 1fr; padding: 30px 24px; }
-      .nav-links { display: none; }
-    }
-    @media (max-width: 600px) {
-      h1 { font-size: 44px; }
-      .cta-row { flex-direction: column; align-items: stretch; }
-      .btn, .app-store-badge { width: 100%; justify-content: center; }
-      .last-call h2 { font-size: 44px; }
-      .faq-q { padding: 16px 18px; font-size: 15px; }
-      .faq-a { padding: 0 18px 18px; }
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="orbs" aria-hidden="true">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-    <div class="orb orb-cursor" id="orbCursor"></div>
-  </div>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <header>
-    <nav class="wrap" aria-label="Main navigation">
-      <a class="brand" href="/">
-        <span class="mark">R</span>
+  <header class="site-header">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="brand" href="/" aria-label="RepWiser home">
+        <span class="mark" aria-hidden="true">R</span>
         <span>RepWiser</span>
       </a>
       <div class="nav-links">
-        <a href="#features">Features</a>
-        <a href="#screens">Screens</a>
+        <a href="#logging">Logging</a>
+        <a href="#coach">Coach</a>
+        <a href="#watch">Watch</a>
+        <a href="#share">Share</a>
         <a href="#faq">FAQ</a>
-        <a href="/privacy/">Privacy</a>
-        <a href="/terms/">Terms</a>
         <a class="nav-cta" href="https://apps.apple.com/app/repwiser/id6744890930" target="_blank" rel="noopener">Get the app</a>
       </div>
     </nav>
   </header>
 
-  <main>
-    <!-- Hero -->
-    <section class="hero wrap">
-      <div class="hero-text">
-        <div class="eyebrow"><span class="pulse-dot"></span>iPhone + Apple Watch</div>
-        <h1>Train with a<br><em>sharper plan.</em></h1>
-        <p class="lead">RepWiser helps you plan workouts, log sets without friction, track PRs, understand recovery, and keep your next session moving from iPhone to Apple Watch.</p>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="wrap">
+        <div class="hero-copy">
+          <p class="hero-kicker">iPhone and Apple Watch workout tracker</p>
+          <h1 id="hero-title">Train with a <span>sharper plan.</span></h1>
+          <p class="hero-lead">RepWiser helps you plan workouts, log sets without friction, track PRs, understand recovery, and keep your next session moving from phone to wrist.</p>
+          <div class="hero-actions">
+            <a class="app-store-badge" href="https://apps.apple.com/app/repwiser/id6744890930" target="_blank" rel="noopener" aria-label="Download on the App Store">
+              <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+              <span class="badge-lines">
+                <span class="badge-pre">Download on the</span>
+                <span class="badge-name">App Store</span>
+              </span>
+            </a>
+            <span class="android-badge" aria-label="Android coming soon" title="Android coming soon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 6.4 16.8 12 7 17.6V6.4Z"/>
+              </svg>
+              <span class="badge-lines">
+                <span class="badge-pre">Coming soon</span>
+                <span class="badge-name">Android</span>
+              </span>
+            </span>
+            <a class="button-secondary" href="#logging">Explore features</a>
+          </div>
+          <div class="hero-trust" aria-label="RepWiser trust signals">
+            <span>No ads</span>
+            <span>Offline-first logging</span>
+            <span>Optional cloud sync</span>
+            <span>Apple Health support</span>
+          </div>
+        </div>
+      </div>
 
-        <div class="cta-row">
-          <a class="app-store-badge" id="ctaPrimary" href="https://apps.apple.com/app/repwiser/id6744890930" target="_blank" rel="noopener" aria-label="Download on the App Store">
-            <svg class="apple-glyph" viewBox="0 0 384 512" aria-hidden="true">
-              <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
-            </svg>
+      <div class="hero-devices" aria-hidden="true">
+        <div class="device-shadow"></div>
+
+        <div class="phone phone-coach">
+          <div class="screen">
+            <div class="mock-status"><span>9:41</span><span>100%</span></div>
+            <div class="screen-pad">
+              <div class="screen-title">
+                <div class="screen-label" style="color: var(--blue);">AI Coach</div>
+                <strong>Today's session</strong>
+              </div>
+              <div class="chat">
+                <div class="bubble">Readiness is up. Your top set can move today.</div>
+                <div class="bubble user">What should I hit?</div>
+                <div class="bubble">Try 5 reps at RPE 8, then hold clean back-off sets.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="phone phone-main">
+          <div class="screen">
+            <div class="mock-status"><span>9:41</span><span>Live</span></div>
+            <div class="screen-pad">
+              <div class="screen-title">
+                <div class="screen-label">Push Strength</div>
+                <strong id="heroTimer">42:18</strong>
+              </div>
+              <div class="mock-metrics">
+                <div class="mock-metric"><span>Sets</span><b>14</b></div>
+                <div class="mock-metric"><span>Volume</span><b>8.7k</b></div>
+                <div class="mock-metric"><span>PR</span><b>2</b></div>
+              </div>
+              <div class="mock-panel">
+                <h3>Incline dumbbell press</h3>
+                <div class="set-grid">
+                  <div class="set-cell">32.5 kg</div>
+                  <div class="set-cell">8 reps</div>
+                  <div class="set-check">✓</div>
+                </div>
+              </div>
+              <div class="mock-panel">
+                <div class="screen-label" style="color: var(--mint);">Coach note</div>
+                <p class="coach-note">Repeat the same load until every rep is clean. Rest 2:15 before the next working set.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="phone phone-progress">
+          <div class="screen">
+            <div class="mock-status"><span>9:41</span><span>84</span></div>
+            <div class="screen-pad">
+              <div class="screen-title">
+                <div class="screen-label" style="color: var(--mint);">Strength index</div>
+                <strong>Progress</strong>
+              </div>
+              <div class="score-ring"><span>84</span></div>
+              <div class="chart-row">
+                <div class="chart-bar" style="height:32%"></div>
+                <div class="chart-bar" style="height:48%"></div>
+                <div class="chart-bar" style="height:40%"></div>
+                <div class="chart-bar" style="height:68%"></div>
+                <div class="chart-bar" style="height:58%"></div>
+                <div class="chart-bar" style="height:78%"></div>
+                <div class="chart-bar" style="height:90%"></div>
+              </div>
+              <div class="mock-row"><span>This week</span><span>+6%</span></div>
+              <div class="mock-row"><span>Likely PR</span><span>Bench</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="watch">
+          <div class="watch-screen">
+            <div class="watch-dot"></div>
+            <div class="watch-time" id="watchTimer">42:18</div>
+            <div class="watch-caption">Active</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="proof" aria-label="RepWiser product highlights">
+      <div class="wrap proof-grid">
+        <div class="proof-item">
+          <strong>Phone + watch</strong>
+          <span>Start on iPhone. Keep the set flow visible on your wrist.</span>
+        </div>
+        <div class="proof-item">
+          <strong>Offline first</strong>
+          <span>Plan and log without waiting on a network request.</span>
+        </div>
+        <div class="proof-item">
+          <strong>Coach aware</strong>
+          <span>Readiness, PR windows, plateaus, and weekly trends.</span>
+        </div>
+        <div class="proof-item">
+          <strong>Private by default</strong>
+          <span>No ads, no data sales, and sync only when you enable it.</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="logging" class="section soft">
+      <div class="wrap feature-layout">
+        <div class="reveal">
+          <div class="section-head">
+            <div class="section-label">Workout logging</div>
+            <h2>Log hard sets without breaking <em>your rhythm.</em></h2>
+            <p class="section-lead">RepWiser separates the plan from the live workout. Change exercises, add sets, track RPE, mark warm-ups, and keep your saved routine clean.</p>
+          </div>
+          <div class="feature-list">
+            <article class="feature-row">
+              <div class="feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M7 8v8"/><path d="M17 8v8"/><path d="M3 9v6"/><path d="M21 9v6"/></svg>
+              </div>
+              <div>
+                <h3>Fast set entry</h3>
+                <p>Weight, reps, rest, RPE, notes, warm-up tags, and set quality all stay close to the active lift.</p>
+              </div>
+            </article>
+            <article class="feature-row">
+              <div class="feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 7h10v10H7z"/><path d="M4 4h4"/><path d="M16 4h4"/><path d="M4 20h4"/><path d="M16 20h4"/></svg>
+              </div>
+              <div>
+                <h3>Templates stay clean</h3>
+                <p>Today's edits can stay in the live workout or be carried back to the routine when you choose.</p>
+              </div>
+            </article>
+            <article class="feature-row">
+              <div class="feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 20V10"/><path d="M12 20V4"/><path d="M17 20v-6"/><path d="M4 20h16"/></svg>
+              </div>
+              <div>
+                <h3>PRs in context</h3>
+                <p>Volume, estimated maxes, likely PR windows, and progression signals update from your logged work.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="workout-board reveal">
+          <div class="board-ticket">
+            <span>Active workout</span>
+            <strong>Push strength is already moving.</strong>
+            <p>Timer, next set, coach note, and workout metrics stay visible.</p>
+          </div>
+          <div class="phone" aria-hidden="true">
+            <div class="screen">
+              <div class="mock-status"><span>9:41</span><span>Live</span></div>
+              <div class="screen-pad">
+                <div class="screen-title">
+                  <div class="screen-label">Active workout</div>
+                  <strong>Bench focus</strong>
+                </div>
+                <div class="mock-metrics">
+                  <div class="mock-metric"><span>Sets</span><b>18</b></div>
+                  <div class="mock-metric"><span>Rest</span><b>1:42</b></div>
+                  <div class="mock-metric"><span>PR</span><b>1</b></div>
+                </div>
+                <div class="mock-panel">
+                  <h3>Barbell bench press</h3>
+                  <div class="set-grid">
+                    <div class="set-cell">90 kg</div>
+                    <div class="set-cell">5 reps</div>
+                    <div class="set-check">✓</div>
+                  </div>
+                </div>
+                <div class="mock-panel">
+                  <h3>Back-off target</h3>
+                  <div class="set-grid">
+                    <div class="set-cell">80 kg</div>
+                    <div class="set-cell">8 reps</div>
+                    <div class="set-check">+</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="coach" class="section dark">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="section-label">Progress and coaching</div>
+          <h2>Know what to push, hold, or <em>recover from.</em></h2>
+          <p class="section-lead">RepWiser turns workout history, Apple Health signals, and routine structure into useful next actions instead of generic motivation.</p>
+        </div>
+
+        <div class="analytics-grid">
+          <article class="analytics-card large reveal">
+            <h3>Weekly training load</h3>
+            <p>Compare volume and effort without digging through old workout logs.</p>
+            <div class="wide-chart" aria-hidden="true">
+              <span style="height:30%"></span>
+              <span style="height:44%"></span>
+              <span style="height:38%"></span>
+              <span style="height:66%"></span>
+              <span style="height:58%"></span>
+              <span style="height:84%"></span>
+              <span style="height:72%"></span>
+              <span style="height:92%"></span>
+              <span style="height:76%"></span>
+              <span style="height:88%"></span>
+            </div>
+          </article>
+
+          <article class="analytics-card medium reveal">
+            <h3>Coach briefing</h3>
+            <p>Simple guidance before the first set starts.</p>
+            <div class="coach-panel">
+              <div class="coach-line">Recovery looks stable. Keep top sets at RPE 8 and avoid forced reps today.</div>
+              <div class="coach-line">Bench has the highest PR chance this week. Squat volume should stay moderate.</div>
+            </div>
+          </article>
+
+          <article class="analytics-card small reveal">
+            <div class="mini-stat">
+              <strong>84</strong>
+              <span>Strength index trending upward</span>
+            </div>
+          </article>
+
+          <article class="analytics-card small reveal">
+            <div class="mini-stat">
+              <strong>2</strong>
+              <span>Likely PR opportunities</span>
+            </div>
+          </article>
+
+          <article class="analytics-card small reveal">
+            <div class="mini-stat">
+              <strong>7.2h</strong>
+              <span>Sleep signal in readiness</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="watch" class="section soft">
+      <div class="wrap watch-section">
+        <div class="watch-stage reveal" aria-hidden="true">
+          <div class="watch">
+            <div class="watch-screen">
+              <div class="watch-dot"></div>
+              <div class="watch-time" id="watchBigTimer">42:18</div>
+              <div class="watch-caption">Set 4 of 5</div>
+            </div>
+          </div>
+          <div class="sync-card">
+            <strong>Wrist-side flow</strong>
+            <span>Rest timer, current exercise, and set completion stay close while you move.</span>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="section-head">
+            <div class="section-label">Apple Watch</div>
+            <h2>Your workout should not live in <em>your pocket.</em></h2>
+            <p class="section-lead">Use RepWiser on iPhone alone, or keep the watch as the quick control surface for active sessions, timers, and HealthKit-aware training context.</p>
+          </div>
+          <div class="feature-list">
+            <article class="feature-row">
+              <div class="feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><rect x="7" y="4" width="10" height="16" rx="4"/><path d="M10 2h4"/><path d="M10 22h4"/></svg>
+              </div>
+              <div>
+                <h3>Companion controls</h3>
+                <p>See the active exercise, rest countdown, and set status without reopening the phone.</p>
+              </div>
+            </article>
+            <article class="feature-row">
+              <div class="feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M20 8c0 7-8 12-8 12S4 15 4 8a8 8 0 0 1 16 0z"/><path d="M9 8h6"/><path d="M12 5v6"/></svg>
+              </div>
+              <div>
+                <h3>Cardio ready</h3>
+                <p>Outdoor walks and runs can use route-aware tracking when you grant location access.</p>
+              </div>
+            </article>
+            <article class="feature-row">
+              <div class="feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M4 12h16"/><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg>
+              </div>
+              <div>
+                <h3>HealthKit context</h3>
+                <p>Sleep, HRV, resting heart rate, and completed workouts are used only with your permission.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="share" class="section">
+      <div class="wrap share-layout">
+        <div class="reveal">
+          <div class="section-head">
+            <div class="section-label">Profiles and sharing</div>
+            <h2>Share progress without handing over <em>everything.</em></h2>
+            <p class="section-lead">RepWiser profile links can show a clean training snapshot from <strong>repwiser.fit/u/</strong>. Useful for friends, coaches, and accountability without turning training into a feed.</p>
+          </div>
+          <div class="feature-list">
+            <article class="feature-row">
+              <div class="feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M8 12h8"/><path d="M12 8v8"/><rect x="4" y="4" width="16" height="16" rx="4"/></svg>
+              </div>
+              <div>
+                <h3>Public profile links</h3>
+                <p>Share goal, plan, recent workouts, and progress highlights from a simple web view.</p>
+              </div>
+            </article>
+            <article class="feature-row">
+              <div class="feature-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 5-3 8-7 9-4-1-7-4-7-9V7l7-4z"/><path d="M9 12l2 2 4-5"/></svg>
+              </div>
+              <div>
+                <h3>Privacy controls first</h3>
+                <p>Data stays local by default. Cloud sync, HealthKit, photos, and location all require explicit permission.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="profile-card reveal" aria-hidden="true">
+          <div class="profile-top">
+            <div class="profile-avatar">B</div>
+            <div>
+              <h3>Biswajit</h3>
+              <p>@repwiser.fit/u/biswajit</p>
+            </div>
+          </div>
+          <div class="profile-stats">
+            <div class="profile-stat"><strong>4</strong><span>Sessions</span></div>
+            <div class="profile-stat"><strong>11.4k</strong><span>Volume</span></div>
+            <div class="profile-stat"><strong>2</strong><span>PRs</span></div>
+          </div>
+          <div class="timeline">
+            <div class="timeline-row"><strong>Push Strength</strong><span>Today</span></div>
+            <div class="timeline-row"><strong>Outdoor Walk</strong><span>Yesterday</span></div>
+            <div class="timeline-row"><strong>Pull Day</strong><span>Mon</span></div>
+            <div class="timeline-row"><strong>Legs Heavy</strong><span>Sat</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="section soft">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div class="section-label">Common questions</div>
+          <h2>What lifters ask before <em>installing.</em></h2>
+          <p class="section-lead">Short answers based on the app behavior and RepWiser privacy policy. For anything else, email <a href="mailto:support@repwiser.fit">support@repwiser.fit</a>.</p>
+        </div>
+
+        <div class="faq-list reveal">
+          <details class="faq-item">
+            <summary class="faq-q">
+              <span>Is RepWiser free?</span>
+              <span class="faq-plus" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+            </summary>
+            <div class="faq-a">RepWiser is free to download and use for core workout logging, planning, and history. Advanced features may appear as in-app purchases, and they are shown clearly in the app.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">
+              <span>Do I need an Apple Watch?</span>
+              <span class="faq-plus" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+            </summary>
+            <div class="faq-a">No. RepWiser works on iPhone alone. The Apple Watch companion is for faster wrist-side workout controls during active sessions.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">
+              <span>Does it work offline?</span>
+              <span class="faq-plus" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+            </summary>
+            <div class="faq-a">Yes. Workouts, routines, and history are stored on-device first. Cloud sync is optional and only used when enabled.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">
+              <span>What does RepWiser use from Apple Health?</span>
+              <span class="faq-plus" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+            </summary>
+            <div class="faq-a">Only data you grant access to, such as sleep, resting heart rate, HRV, activity, and completed workouts. Health data is used for app features, not advertising.</div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-q">
+              <span>How is my data stored?</span>
+              <span class="faq-plus" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+            </summary>
+            <div class="faq-a">Locally by default. Optional cloud sync uses RepWiser-managed infrastructure. See the <a href="/privacy/">privacy policy</a> for the detailed data list.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta" aria-labelledby="final-title">
+      <div class="wrap reveal">
+        <h2 id="final-title">Train <em>sharper.</em></h2>
+        <p>Install RepWiser on iPhone, connect Apple Watch when you want wrist-side controls, and keep your next workout moving.</p>
+        <div class="final-store-row" aria-label="RepWiser platform availability">
+          <a class="app-store-badge" href="https://apps.apple.com/app/repwiser/id6744890930" target="_blank" rel="noopener" aria-label="Download on the App Store">
+            <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
             <span class="badge-lines">
               <span class="badge-pre">Download on the</span>
               <span class="badge-name">App Store</span>
             </span>
           </a>
-          <a class="btn btn-secondary" href="#features">See features</a>
-        </div>
-
-        <div class="trust-line">
-          <span>Privacy-first</span>
-          <span class="trust-dot"></span>
-          <span>Apple Watch + iPhone</span>
-          <span class="trust-dot"></span>
-          <span>No ads, no data sales</span>
-        </div>
-
-        <!-- Star row. Until App Store reviews accrue, this is the indie-dev
-             signal. Swap to "★ 4.x · N ratings" when the App Store has 5+
-             reviews; see comment in `Beta-feedback card` for the real-quote
-             swap as well. -->
-        <div class="star-row">
-          <span class="stars" aria-hidden="true">
-            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 6 6.4.5-4.9 4.2 1.5 6.3L10 14.8l-5.6 3.2L5.9 11.7 1 7.5l6.4-.5L10 1z"/></svg>
-            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 6 6.4.5-4.9 4.2 1.5 6.3L10 14.8l-5.6 3.2L5.9 11.7 1 7.5l6.4-.5L10 1z"/></svg>
-            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 6 6.4.5-4.9 4.2 1.5 6.3L10 14.8l-5.6 3.2L5.9 11.7 1 7.5l6.4-.5L10 1z"/></svg>
-            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 6 6.4.5-4.9 4.2 1.5 6.3L10 14.8l-5.6 3.2L5.9 11.7 1 7.5l6.4-.5L10 1z"/></svg>
-            <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 1l2.6 6 6.4.5-4.9 4.2 1.5 6.3L10 14.8l-5.6 3.2L5.9 11.7 1 7.5l6.4-.5L10 1z"/></svg>
+          <span class="android-badge" aria-label="Android coming soon" title="Android coming soon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 6.4 16.8 12 7 17.6V6.4Z"/>
+            </svg>
+            <span class="badge-lines">
+              <span class="badge-pre">Coming soon</span>
+              <span class="badge-name">Android</span>
+            </span>
           </span>
-          <span class="star-attr">Built by a lifter <span>· Indie, no investors</span></span>
         </div>
       </div>
-
-      <div class="phone-stack" aria-label="RepWiser app preview">
-        <!-- Aux phone (left, behind): Insights screen -->
-        <div class="phone phone-aux phone-aux--left" aria-hidden="true">
-          <div class="screen">
-            <div class="di"></div>
-            <div class="status-bar"><span>9:41</span></div>
-            <div class="screen-content">
-              <div class="scr-top scr-top--insights">
-                <div class="live-badge live-badge--green"><span class="pulse-dot" style="width:5px;height:5px;background:var(--green);"></span>Strength Index</div>
-                <div class="scr-insights-score">
-                  <span class="num">84</span>
-                  <span class="lbl">SCORE</span>
-                  <span class="scr-insights-trend">↑ 6</span>
-                </div>
-              </div>
-              <div class="scr-bars">
-                <div class="scr-bar" style="height:32%"></div>
-                <div class="scr-bar" style="height:48%"></div>
-                <div class="scr-bar" style="height:38%"></div>
-                <div class="scr-bar" style="height:64%"></div>
-                <div class="scr-bar" style="height:54%"></div>
-                <div class="scr-bar" style="height:78%"></div>
-                <div class="scr-bar" style="height:88%"></div>
-              </div>
-              <div class="scr-card">
-                <div class="scr-card-lbl">This week</div>
-                <div class="scr-card-title">11.4k kg · 4 sessions</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Aux phone (right, behind): Routines screen -->
-        <div class="phone phone-aux phone-aux--right" aria-hidden="true">
-          <div class="screen">
-            <div class="di"></div>
-            <div class="status-bar"><span>9:41</span></div>
-            <div class="screen-content">
-              <div class="scr-top scr-top--routines">
-                <div class="live-badge live-badge--purple">Routines</div>
-                <div class="scr-card-title" style="margin-top:6px;">My Plans</div>
-              </div>
-              <div class="scr-routines">
-                <div class="scr-routine">
-                  <div>
-                    <div class="scr-routine-name">Push · Strength</div>
-                    <div class="scr-routine-meta">5 lifts · 50 min</div>
-                  </div>
-                  <div class="scr-routine-cta">▶</div>
-                </div>
-                <div class="scr-routine">
-                  <div>
-                    <div class="scr-routine-name">Pull Day</div>
-                    <div class="scr-routine-meta">6 lifts · 55 min</div>
-                  </div>
-                  <div class="scr-routine-cta">▶</div>
-                </div>
-                <div class="scr-routine">
-                  <div>
-                    <div class="scr-routine-name">Legs · Heavy</div>
-                    <div class="scr-routine-meta">7 lifts · 65 min</div>
-                  </div>
-                  <div class="scr-routine-cta">▶</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="phone-glow" aria-hidden="true"></div>
-
-        <!-- Main phone: Active workout (the existing scaffolding). -->
-        <div class="phone phone-main">
-          <div class="screen">
-            <div class="di" aria-hidden="true"></div>
-            <div class="status-bar">
-              <span>9:41</span>
-              <div class="sb-icons">
-                <svg width="14" height="10" viewBox="0 0 14 10" fill="none" opacity=".85"><rect x="0" y="3" width="2" height="7" rx="1" fill="currentColor"/><rect x="3" y="2" width="2" height="8" rx="1" fill="currentColor"/><rect x="6" y="1" width="2" height="9" rx="1" fill="currentColor"/><rect x="9" y="0" width="2" height="10" rx="1" fill="currentColor"/></svg>
-                <svg width="14" height="10" viewBox="0 0 14 10" fill="none" opacity=".85"><path d="M7 2.5C9.2 2.5 11.1 3.5 12.4 5L13.5 3.9C11.9 2.1 9.6 1 7 1C4.4 1 2.1 2.1 0.5 3.9L1.6 5C2.9 3.5 4.8 2.5 7 2.5Z" fill="currentColor"/><path d="M7 5.5C8.4 5.5 9.7 6.1 10.6 7L11.7 5.9C10.5 4.7 8.8 4 7 4C5.2 4 3.5 4.7 2.3 5.9L3.4 7C4.3 6.1 5.6 5.5 7 5.5Z" fill="currentColor"/><circle cx="7" cy="9" r="1" fill="currentColor"/></svg>
-                <div class="battery"><div class="battery-body"><div class="battery-fill"></div></div></div>
-              </div>
-            </div>
-            <div class="screen-content">
-              <div class="scr-top">
-                <div class="live-badge">
-                  <span class="pulse-dot" style="width:5px;height:5px;"></span>
-                  Live · Push Strength
-                </div>
-                <div class="scr-timer" id="timer">42:18</div>
-                <div class="scr-timer-label">Duration</div>
-              </div>
-              <div class="scr-metrics">
-                <div class="scr-metric"><span>Sets</span><strong>14</strong></div>
-                <div class="scr-metric"><span>Volume</span><strong>8.7k</strong></div>
-                <div class="scr-metric"><span>PRs</span><strong>2 ✦</strong></div>
-              </div>
-              <div class="scr-card">
-                <div class="scr-card-lbl">Current lift</div>
-                <div class="scr-card-title">Incline Dumbbell Press</div>
-                <div class="scr-set-row">
-                  <div class="scr-pill">32.5 kg</div>
-                  <div class="scr-pill">8 reps</div>
-                  <div class="scr-check">✓</div>
-                </div>
-              </div>
-              <div class="scr-coach">
-                <div class="scr-card-lbl">Coach note</div>
-                <div class="scr-coach-text">Hold RPE 8, repeat clean reps before loading again.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="divider wrap"></div>
-
-    <!-- Features -->
-    <section id="features" class="wrap reveal">
-      <div class="sec-eyebrow"><span class="sec-rule"></span>Features</div>
-      <h2>Built for the session<br>you're <em>actually doing.</em></h2>
-      <p class="sec-lead">RepWiser keeps routine planning separate from the live workout, so you can adapt today without damaging your saved templates.</p>
-      <div class="cards">
-        <article class="card reveal">
-          <div class="card-num">01 · Logging</div>
-          <h3>Live workout logging</h3>
-          <p>Log weight, reps, RPE, warm-ups, set tags, notes, rest, cardio, and exercise changes inside a focused active-workout flow.</p>
-          <div class="card-visual">
-            <div class="mini-set">
-              <div class="mini-pill">32.5 kg</div>
-              <div class="mini-pill">8 reps · RPE 8</div>
-              <div class="mini-check">✓</div>
-            </div>
-          </div>
-        </article>
-        <article class="card reveal reveal-2">
-          <div class="card-num">02 · Insights</div>
-          <h3>Coach-first insights</h3>
-          <p>See readiness, likely PR windows, weekly trends, plateaus, muscle balance, and practical next actions from your training history.</p>
-          <div class="card-visual">
-            <div class="mini-coach-line">
-              <div class="mini-coach-icon">⚡</div>
-              <span>Recovery good — 7.2h sleep, HRV 62ms</span>
-            </div>
-          </div>
-        </article>
-        <article class="card reveal reveal-3">
-          <div class="card-num">03 · Watch</div>
-          <h3>Watch-aware training</h3>
-          <p>Start from iPhone, keep the watch in sync, and use Apple Health, notifications, widgets, and route tracking when you enable them.</p>
-          <div class="card-visual">
-            <div class="mini-watch">
-              <div class="watch-face">
-                <div class="watch-dot"></div>
-                <div class="watch-time" id="w-timer">42:18</div>
-                <div class="watch-lbl">Active</div>
-              </div>
-              <div class="watch-meta">
-                <div class="watch-meta-row"><strong>14</strong> sets</div>
-                <div class="watch-meta-row"><strong>8.7k</strong> kg</div>
-                <div class="watch-meta-row"><strong>2</strong> PRs ✦</div>
-              </div>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- Screenshots gallery -->
-    <section id="screens" class="wrap reveal">
-      <div class="sec-eyebrow"><span class="sec-rule"></span>Inside the app</div>
-      <h2>Every surface, sharper than <em>last week.</em></h2>
-      <p class="sec-lead">Four core screens, each focused on doing one thing well. No clutter, no upsells.</p>
-
-      <div class="gallery-shell">
-        <div class="gallery-nav" aria-hidden="true">
-          <button class="gallery-btn" id="galPrev" aria-label="Previous screen">
-            <svg viewBox="0 0 24 24"><polyline points="15 6 9 12 15 18"/></svg>
-          </button>
-          <button class="gallery-btn" id="galNext" aria-label="Next screen">
-            <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
-          </button>
-        </div>
-
-        <div class="gallery-track" id="galTrack">
-          <!-- Slide 1 — Active workout -->
-          <div class="gallery-slide">
-            <div class="phone">
-              <div class="screen">
-                <div class="di"></div>
-                <div class="status-bar"><span>9:41</span></div>
-                <div class="screen-content">
-                  <div class="scr-top">
-                    <div class="live-badge"><span class="pulse-dot" style="width:5px;height:5px;"></span>Live · Push</div>
-                    <div class="scr-timer">42:18</div>
-                    <div class="scr-timer-label">Duration</div>
-                  </div>
-                  <div class="scr-metrics">
-                    <div class="scr-metric"><span>Sets</span><strong>14</strong></div>
-                    <div class="scr-metric"><span>Volume</span><strong>8.7k</strong></div>
-                    <div class="scr-metric"><span>PRs</span><strong>2 ✦</strong></div>
-                  </div>
-                  <div class="scr-card">
-                    <div class="scr-card-lbl">Current lift</div>
-                    <div class="scr-card-title">Incline DB Press</div>
-                    <div class="scr-set-row">
-                      <div class="scr-pill">32.5 kg</div>
-                      <div class="scr-pill">8 reps</div>
-                      <div class="scr-check">✓</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="gallery-caption">
-              <strong>Active workout</strong>
-              <span>Plate calc, RPE, rest timer, and warm-ups in one focused flow.</span>
-            </div>
-          </div>
-
-          <!-- Slide 2 — Insights -->
-          <div class="gallery-slide">
-            <div class="phone">
-              <div class="screen">
-                <div class="di"></div>
-                <div class="status-bar"><span>9:41</span></div>
-                <div class="screen-content">
-                  <div class="scr-top scr-top--insights">
-                    <div class="live-badge live-badge--green"><span class="pulse-dot" style="width:5px;height:5px;background:var(--green);"></span>Strength Index</div>
-                    <div class="scr-insights-score">
-                      <span class="num">84</span>
-                      <span class="lbl">SCORE</span>
-                      <span class="scr-insights-trend">↑ 6</span>
-                    </div>
-                  </div>
-                  <div class="scr-bars">
-                    <div class="scr-bar" style="height:32%"></div>
-                    <div class="scr-bar" style="height:48%"></div>
-                    <div class="scr-bar" style="height:38%"></div>
-                    <div class="scr-bar" style="height:64%"></div>
-                    <div class="scr-bar" style="height:54%"></div>
-                    <div class="scr-bar" style="height:78%"></div>
-                    <div class="scr-bar" style="height:88%"></div>
-                  </div>
-                  <div class="scr-card">
-                    <div class="scr-card-lbl">This week</div>
-                    <div class="scr-card-title">11.4k kg · 4 sessions</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="gallery-caption">
-              <strong>Insights</strong>
-              <span>Strength index, plateaus, muscle balance — pulled from your real history.</span>
-            </div>
-          </div>
-
-          <!-- Slide 3 — Coach -->
-          <div class="gallery-slide">
-            <div class="phone">
-              <div class="screen">
-                <div class="di"></div>
-                <div class="status-bar"><span>9:41</span></div>
-                <div class="screen-content">
-                  <div class="scr-top scr-top--coach">
-                    <div class="live-badge live-badge--blue">AI Coach</div>
-                    <div class="scr-card-title" style="margin-top:6px;">Today's session</div>
-                  </div>
-                  <div class="scr-chat">
-                    <div class="scr-bubble scr-bubble--coach">Recovery looks good — HRV up 8% week-on-week. Push your top set today.</div>
-                    <div class="scr-bubble scr-bubble--user">What's a smart top set?</div>
-                    <div class="scr-bubble scr-bubble--coach">Try 5 × 90 kg @ RPE 8. Stop if bar speed drops.</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="gallery-caption">
-              <strong>Coach</strong>
-              <span>Practical, training-aware advice. Nothing generic, nothing pushy.</span>
-            </div>
-          </div>
-
-          <!-- Slide 4 — Routines -->
-          <div class="gallery-slide">
-            <div class="phone">
-              <div class="screen">
-                <div class="di"></div>
-                <div class="status-bar"><span>9:41</span></div>
-                <div class="screen-content">
-                  <div class="scr-top scr-top--routines">
-                    <div class="live-badge live-badge--purple">Routines</div>
-                    <div class="scr-card-title" style="margin-top:6px;">My Plans</div>
-                  </div>
-                  <div class="scr-routines">
-                    <div class="scr-routine">
-                      <div>
-                        <div class="scr-routine-name">Push · Strength</div>
-                        <div class="scr-routine-meta">5 lifts · 50 min</div>
-                      </div>
-                      <div class="scr-routine-cta">▶</div>
-                    </div>
-                    <div class="scr-routine">
-                      <div>
-                        <div class="scr-routine-name">Pull Day</div>
-                        <div class="scr-routine-meta">6 lifts · 55 min</div>
-                      </div>
-                      <div class="scr-routine-cta">▶</div>
-                    </div>
-                    <div class="scr-routine">
-                      <div>
-                        <div class="scr-routine-name">Legs · Heavy</div>
-                        <div class="scr-routine-meta">7 lifts · 65 min</div>
-                      </div>
-                      <div class="scr-routine-cta">▶</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="gallery-caption">
-              <strong>Routines</strong>
-              <span>Plan once, adapt during the session. Templates stay clean.</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Voice / social proof -->
-    <section id="voice" class="wrap reveal">
-      <div class="sec-eyebrow"><span class="sec-rule"></span>From the lab</div>
-      <h2>Built by someone <br>who <em>lifts.</em></h2>
-      <p class="sec-lead">RepWiser is an indie product. No investors, no growth hacks, no ad SDK. The whole thing exists because logging shouldn't break the flow of training.</p>
-
-      <div class="voice-cards">
-        <article class="voice-card reveal">
-          <p class="voice-quote">I built RepWiser because logging shouldn't break the flow of training. Every screen had to earn its place.</p>
-          <div class="voice-attribution">
-            <div class="voice-avatar" aria-hidden="true">B</div>
-            <div>
-              <div class="voice-name">Biswajit</div>
-              <div class="voice-role">Solo developer · iOS / SwiftUI</div>
-            </div>
-          </div>
-        </article>
-
-        <article class="voice-card reveal reveal-2">
-          <p class="voice-quote">Your data <em>stays focused on training.</em> No third-party SDK, no ad pixels, sync is opt-in.</p>
-          <div class="voice-stats">
-            <div class="voice-stat"><span class="num">0</span><span class="lbl">Ad SDKs</span></div>
-            <div class="voice-stat"><span class="num">0</span><span class="lbl">Trackers</span></div>
-            <div class="voice-stat"><span class="num">100%</span><span class="lbl">Private</span></div>
-          </div>
-          <div class="voice-attribution">
-            <div class="voice-avatar voice-avatar--green" aria-hidden="true">P</div>
-            <div>
-              <div class="voice-name">Privacy by default</div>
-              <div class="voice-role"><a href="/privacy/" style="color:var(--muted);">Read the policy →</a></div>
-            </div>
-          </div>
-        </article>
-
-        <!-- TODO: Replace with a real App Store review when one accrues.
-             Keep the structure (single sentence + attribution) so the
-             voice block stays balanced. -->
-        <article class="voice-card reveal reveal-3">
-          <p class="voice-quote">"It's the first logger that doesn't make me drop my pace."</p>
-          <div class="voice-attribution">
-            <div class="voice-avatar voice-avatar--neutral" aria-hidden="true">★</div>
-            <div>
-              <div class="voice-name">Beta tester</div>
-              <div class="voice-role">TestFlight build · Apr 2026</div>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- FAQ -->
-    <section id="faq" class="wrap reveal">
-      <div class="sec-eyebrow"><span class="sec-rule"></span>Common questions</div>
-      <h2>Things lifters ask<br>before <em>installing.</em></h2>
-      <p class="sec-lead">Short answers, mirrored from the privacy policy. If something's missing, mail <a href="mailto:support@repwiser.fit" style="color:var(--amber);">support@repwiser.fit</a>.</p>
-
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>Is RepWiser free?</span>
-            <span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
-          </summary>
-          <div class="faq-a">RepWiser is free to download and use for core workout logging, planning, and history. Some advanced features are available via in-app purchase; you'll see them clearly inside the app. There are no ads.</div>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>Do I need an Apple Watch?</span>
-            <span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
-          </summary>
-          <div class="faq-a">No. RepWiser is fully usable on iPhone alone. The Apple Watch companion adds wrist-side controls during a session (rest timer, set complete, focused exercise) but is entirely optional.</div>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>Does it work offline?</span>
-            <span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
-          </summary>
-          <div class="faq-a">Yes. Workouts, routines, and history live on-device. Cloud sync is opt-in — turn it on if you want to back up or move to a new phone, otherwise nothing leaves your iPhone.</div>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>What does it read from Apple Health?</span>
-            <span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
-          </summary>
-          <div class="faq-a">Only what you grant. Sleep, resting heart rate, HRV, and recent activity are read to show readiness signals. RepWiser can also save your completed workouts back to Apple Health when you enable HealthKit writes.</div>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>Can I export my workout history?</span>
-            <span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
-          </summary>
-          <div class="faq-a">Yes. Settings has an export option that produces a portable file of your full history. Apple Health writes also keep a parallel copy in the system Health database.</div>
-        </details>
-
-        <details class="faq-item">
-          <summary class="faq-q">
-            <span>How is my data stored?</span>
-            <span class="faq-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>
-          </summary>
-          <div class="faq-a">Locally on your device by default. Cloud sync (when enabled) goes to a private RepWiser-managed Supabase project. No third-party trackers, no ad networks. Full details are in the <a href="/privacy/">privacy policy</a>.</div>
-        </details>
-      </div>
-    </section>
-
-    <!-- Privacy band -->
-    <section id="privacy" class="band-section wrap reveal">
-      <div class="band">
-        <div>
-          <h2>Your training data stays<br><em>focused on training.</em></h2>
-          <p>RepWiser does not sell personal data or use your data for third-party advertising. Optional features such as Apple Health, location routes, progress photos, cloud sync, and AI coaching are used to power app functionality only.</p>
-        </div>
-        <a class="btn-band" href="/privacy/">View Privacy Policy →</a>
-      </div>
-    </section>
-
-    <!-- Last call CTA -->
-    <section class="last-call wrap reveal">
-      <h2>Train <em>sharper.</em></h2>
-      <a class="app-store-badge" href="https://apps.apple.com/app/repwiser/id6744890930" target="_blank" rel="noopener" aria-label="Download on the App Store">
-        <svg class="apple-glyph" viewBox="0 0 384 512" aria-hidden="true">
-          <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
-        </svg>
-        <span class="badge-lines">
-          <span class="badge-pre">Download on the</span>
-          <span class="badge-name">App Store</span>
-        </span>
-      </a>
-      <p>Or open <strong style="color:var(--text);">repwiser.fit</strong> on your iPhone to install.</p>
     </section>
   </main>
 
-  <footer>
+  <footer class="site-footer">
     <div class="wrap footer-inner">
       <div class="footer-brand">
-        <a class="brand" href="/">
-          <span class="mark">R</span>
-          <span style="font-size:15px;font-weight:700;">RepWiser</span>
+        <a class="brand" href="/" aria-label="RepWiser home">
+          <span class="mark" aria-hidden="true">R</span>
+          <span>RepWiser</span>
         </a>
-        <span class="footer-copy" style="margin-left:8px">© 2026 Biswajit Bastia</span>
+        <span class="footer-copy">&copy; 2026 Biswajit Bastia</span>
       </div>
       <div class="footer-links">
         <a href="mailto:support@repwiser.fit">support@repwiser.fit</a>
@@ -1531,83 +2231,42 @@
   </footer>
 
   <script>
-    // ── Animated timer (phone + watch) ──
-    let secs = 42 * 60 + 18;
-    const timerEl = document.getElementById('timer');
-    const wTimerEl = document.getElementById('w-timer');
-    function fmt(s) {
-      return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+    const timerTargets = [
+      document.getElementById("heroTimer"),
+      document.getElementById("watchTimer"),
+      document.getElementById("watchBigTimer")
+    ];
+    let elapsedSeconds = 42 * 60 + 18;
+
+    function formatTimer(totalSeconds) {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
     }
-    setInterval(() => {
-      secs++;
-      const t = fmt(secs);
-      if (timerEl) timerEl.textContent = t;
-      if (wTimerEl) wTimerEl.textContent = t;
+
+    window.setInterval(() => {
+      elapsedSeconds += 1;
+      const label = formatTimer(elapsedSeconds);
+      timerTargets.forEach((target) => {
+        if (target) target.textContent = label;
+      });
     }, 1000);
 
-    // ── Scroll reveal ──
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.08 });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-    // ── Motion enhancements (gated to viewport >= 900px and no
-    //    prefers-reduced-motion). Keep cheap on phones; the static
-    //    fallback already looks complete without them. ──
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const wideViewport  = window.matchMedia('(min-width: 900px)').matches;
-
-    if (!reducedMotion && wideViewport) {
-      // Cursor-tracked spotlight orb. The existing .orb-cursor element is
-      // hidden until JS activates it, so users on no-JS or reduced-motion
-      // never see a misplaced halo.
-      const orb = document.getElementById('orbCursor');
-      if (orb) {
-        orb.classList.add('is-active');
-        let pendingX = 0, pendingY = 0, ticking = false;
-        function update() {
-          orb.style.transform = `translate3d(${pendingX - 240}px, ${pendingY - 240}px, 0)`;
-          ticking = false;
-        }
-        window.addEventListener('mousemove', (e) => {
-          pendingX = e.clientX; pendingY = e.clientY;
-          if (!ticking) { requestAnimationFrame(update); ticking = true; }
-        }, { passive: true });
-      }
-
-      // Magnetic primary CTA — translates 4-6px toward the cursor when
-      // within ~80px. Restrained on purpose; bigger pulls feel gimmicky.
-      const cta = document.getElementById('ctaPrimary');
-      if (cta) {
-        cta.addEventListener('mousemove', (e) => {
-          const rect = cta.getBoundingClientRect();
-          const cx = rect.left + rect.width / 2;
-          const cy = rect.top  + rect.height / 2;
-          const dx = (e.clientX - cx) / rect.width;
-          const dy = (e.clientY - cy) / rect.height;
-          cta.style.transform = `translate(${dx * 6}px, ${dy * 4}px)`;
+    const revealTargets = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
         });
-        cta.addEventListener('mouseleave', () => {
-          cta.style.transform = '';
-        });
-      }
+      }, { threshold: 0.08 });
+
+      revealTargets.forEach((target) => observer.observe(target));
+    } else {
+      revealTargets.forEach((target) => target.classList.add("visible"));
     }
-
-    // ── Screenshots gallery prev / next ──
-    (function () {
-      const track = document.getElementById('galTrack');
-      const prev  = document.getElementById('galPrev');
-      const next  = document.getElementById('galNext');
-      if (!track || !prev || !next) return;
-      function step(direction) {
-        const slide = track.querySelector('.gallery-slide');
-        if (!slide) return;
-        const width = slide.getBoundingClientRect().width + 22; /* gap */
-        track.scrollBy({ left: direction * width, behavior: 'smooth' });
-      }
-      prev.addEventListener('click', () => step(-1));
-      next.addEventListener('click', () => step(1));
-    })();
   </script>
 </body>
 </html>
