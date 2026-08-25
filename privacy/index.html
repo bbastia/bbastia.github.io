@@ -233,7 +233,7 @@
           <li><a href="#changes">Changes</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
-        <div class="toc-footer">Effective May 1, 2026</div>
+        <div class="toc-footer">Effective August 25, 2026</div>
       </nav>
     </aside>
 
@@ -242,7 +242,7 @@
       <div class="doc-hero">
         <div class="eyebrow">
           <svg width="9" height="9" viewBox="0 0 9 9" fill="none"><circle cx="4.5" cy="4.5" r="4.5" fill="currentColor" opacity=".4"/><circle cx="4.5" cy="4.5" r="2.5" fill="currentColor"/></svg>
-          Effective May 1, 2026
+          Effective August 25, 2026
         </div>
         <h1 class="doc-h1">Privacy<br><em>Policy</em></h1>
         <p class="doc-intro">This policy explains how RepWiser handles information used to provide workout logging, coaching, recovery, Apple Watch, Apple Health, route tracking, sync, and support features.</p>
@@ -294,12 +294,30 @@
 
         <div class="doc-section" id="cloud">
           <h2>Cloud Sync And AI Features</h2>
-          <p>RepWiser may offer cloud sync and coaching features that process your training data through managed backend services. These features are used to keep your data available across sessions and to generate app functionality such as coaching summaries or recommendations. You should not enter sensitive information into free-text notes that you do not want processed by these features.</p>
+          <p>RepWiser may offer cloud sync so your training data stays available across sessions and devices. Sync data is stored on our managed backend (Supabase).</p>
+          <p><strong>AI coaching is powered by OpenAI.</strong> RepWiser's AI features &mdash; the Meera coach, AI workout and nutrition reviews, AI food logging, and weekly insights &mdash; send information from your account to OpenAI, L.L.C. through our own servers so a response can be generated. <strong>AI features are off until you turn them on.</strong> The first time you use an AI feature, RepWiser shows you exactly what is sent and asks for your permission. Nothing is sent to OpenAI before you agree, and you can withdraw permission at any time in Settings &rsaquo; Privacy &amp; Sharing &rsaquo; AI coaching.</p>
+          <p>When AI coaching is on, the following is sent to OpenAI:</p>
+          <ul>
+            <li><strong>Profile details</strong> &mdash; display name, age, sex, height, current and target weight, training goal and experience, training availability, available equipment, and any injuries, limitations or dietary preferences you have entered.</li>
+            <li><strong>Training data</strong> &mdash; workouts you have logged, including exercises, sets, reps, weights and session history, and the workout in progress if you ask during a session.</li>
+            <li><strong>Nutrition data</strong> &mdash; food and drink logged for the day, and the text or description you enter when using AI food logging.</li>
+            <li><strong>Apple Health data, only if you have connected Apple Health</strong> &mdash; sleep duration, resting heart rate, heart rate variability, active energy, step count, and the readiness score derived from them.</li>
+            <li><strong>What you type</strong> &mdash; the question or note you send to the coach.</li>
+          </ul>
+          <p>Your email address, password, payment details, city or location, and progress photos are <strong>not</strong> sent to OpenAI. OpenAI processes this information solely to return a coaching response to RepWiser. We do not use AI features for advertising, and we do not sell your personal information.</p>
+          <p>You should not enter sensitive information into free-text notes that you do not want processed by these features.</p>
         </div>
 
         <div class="doc-section" id="third-party">
           <h2>Third-Party Services</h2>
           <p>RepWiser may rely on service providers for authentication, sync, backend processing, crash diagnostics, app distribution, and email support. These providers process information only as needed to provide app functionality, security, support, and reliability.</p>
+          <p>The third parties RepWiser shares personal data with are:</p>
+          <ul>
+            <li><strong>OpenAI, L.L.C.</strong> &mdash; processes the data listed under Cloud Sync And AI Features to generate AI coaching responses, only after you have turned AI features on.</li>
+            <li><strong>Supabase</strong> &mdash; hosts your account and, if you use cloud sync, your synced training data.</li>
+            <li><strong>Apple</strong> &mdash; sign-in, app distribution, and in-app purchases. <strong>Google</strong> &mdash; sign-in, if you choose it.</li>
+          </ul>
+          <p>We require each of these providers, by contract, to protect your information to a standard equal to or greater than the protection described in this policy, to process it only on our instructions for the purposes described here, and not to sell it or use it to train general-purpose models on your data.</p>
         </div>
 
         <div class="doc-section" id="retention">
